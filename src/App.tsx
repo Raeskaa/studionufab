@@ -586,14 +586,14 @@ function App() {
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
               title="Take a screenshot"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenshot</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenhot</span>
             </button>
             <button
               onClick={handleDeleteBlogClick} // Call the new handler for confirmation
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
               title="Delete Blog Frame"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Delete</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Dlt</span>
             </button>
           </div>
 
