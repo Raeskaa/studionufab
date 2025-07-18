@@ -35,7 +35,7 @@ function App() {
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#1244F1'); // Changed initial background color to blue
   const [showScreenshotModal, setShowScreenshotModal] = useState(false);
-  const [screenshotDataUrl, setScreenshotDataUrl] = useState('');
+  const [screenshotDataUrl, setScreenshotDataUrl] = useState(''); // Fixed: useState('') instead of = ''
 
   // Initial dimensions for the blog frame
   const initialFrameWidth = window.innerWidth * 0.55;
@@ -123,8 +123,8 @@ function App() {
 
     inactivityTimeoutRef.current = window.setTimeout(() => {
       addEye(); // Add first eye after 5 seconds
-      eyeIntervalRef.current = window.setInterval(addEye, 10000); // Add subsequent eyes every 2 seconds
-    }, 30000); // 5 seconds for first eye
+      eyeIntervalRef.current = window.setInterval(addEye, 10000); // Add subsequent eyes every 10 seconds
+    }, 30000); // 30 seconds for first eye
   }, [addEye]);
 
   // Effect hook for canvas initialization, resizing, and dynamically loading html2canvas
@@ -461,7 +461,7 @@ function App() {
       {eyes.map((eye) => (
         <div
           key={eye.id}
-          className="absolute z-20" // Z-index below blog frame but above canvas
+          className="absolute z-40" // Increased z-index for eyes to be above mobile blog frame
           style={{
             top: eye.y,
             left: eye.x,
@@ -586,14 +586,14 @@ function App() {
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
               title="Take a screenshot"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenhot</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenshot</span>
             </button>
             <button
               onClick={handleDeleteBlogClick} // Call the new handler for confirmation
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
               title="Delete Blog Frame"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Dlt</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Delete</span>
             </button>
           </div>
 
@@ -710,25 +710,28 @@ function App() {
 
       {/* Mobile Blog Content - Hidden by default for desktop, shown on mobile */}
       <div className="md:hidden absolute inset-0 bg-white overflow-y-auto p-6 z-30" id="mobile-blog">
+        {/* Removed <h2 className="text-lg font-bold">Blog</h2> */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-lg font-bold">Blog</h2>
-          <div className="flex gap-2">
-            <button
-              onClick={prevPost}
-              className="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <button
-              onClick={nextPost}
-              className="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
+          {/* Mobile-specific navigation and "I'm bored" buttons */}
+          {showBlogContentFrame && (
+            <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-40">
+              <button
+                onClick={prevPost}
+                className="w-10 h-10 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md"
+              >
+                <ChevronLeft size={20} className="text-black" />
+              </button>
+              <button
+                onClick={nextPost}
+                className="w-10 h-10 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md"
+              >
+                <ChevronRight size={20} className="text-black" />
+              </button>
+            </div>
+          )}
         </div>
 
-        <h1 className="text-3xl font-bold mb-4" style={{ fontFamily: 'dotmatri, serif' }}> {/* Increased size and applied font */}
+        <h1 className="text-4xl font-bold mb-4" style={{ fontFamily: 'dotmatri, serif' }}> {/* Increased size for mobile */}
           {currentPost.title}
         </h1>
         <h2 className="text-xl mb-4" style={{ fontFamily: 'Sofia Sans, sans-serif' }}> {/* Applied font */}
