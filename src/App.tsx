@@ -364,7 +364,7 @@ function App() {
       {/* Custom Pencil Cursor */}
       {showPencil && (
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/4/47/Blue_pencil.svg" // Updated pencil SVG URL
+          src="https://raw.githubusercontent.com/Raeskaa/studionufab/59d263299b8c3990bd561abbd995c9f13409b6ac/Cursor%20for%20Blog.svg" // Updated pencil SVG URL
           alt="Pencil Cursor"
           className="absolute z-50" // High z-index to be on top
           style={{
