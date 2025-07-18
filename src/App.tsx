@@ -24,8 +24,6 @@ const blogPosts = [
   }
 ];
 
-// Removed the EyeSVG component as we are now using an external SVG image
-
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -58,11 +56,15 @@ function App() {
   const [dragOffsetLogo, setDragOffsetLogo] = useState({ x: 0, y: 0 }); // Offset for logo circle
 
   // State for inactivity eyes feature
-  // Added 'rotation' property to the eye object
   const [eyes, setEyes] = useState<{ id: number; x: number; y: number; rotation: number }[]>([]);
   const inactivityTimeoutRef = useRef<number | null>(null);
   const eyeIntervalRef = useRef<number | null>(null);
   let eyeIdCounter = useRef(0);
+
+  // State for custom pencil cursor
+  const [pencilPosition, setPencilPosition] = useState({ x: 0, y: 0 });
+  const [showPencil, setShowPencil] = useState(false);
+
 
   const colors = [
     '#1244F1', // Blue
@@ -201,6 +203,26 @@ function App() {
     setIsDrawing(false);
   };
 
+  // --- Pencil Cursor Functions ---
+  const handleCanvasMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const rect = canvas.getBoundingClientRect();
+      setPencilPosition({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+      setShowPencil(true);
+    }
+    // Also pass to drawing function if drawing is active
+    draw(e);
+  };
+
+  const handleCanvasMouseLeave = () => {
+    setShowPencil(false);
+    stopDrawing();
+  };
+
   // --- Blog Post Navigation Functions ---
   const nextPost = () => {
     setCurrentPostIndex((prev) => (prev + 1) % blogPosts.length);
@@ -307,13 +329,28 @@ function App() {
       {/* Drawing Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute top-0 left-0 z-10 cursor-crosshair"
+        className="absolute top-0 left-0 z-10" // Removed cursor-crosshair
         onMouseDown={startDrawing}
-        onMouseMove={draw}
+        onMouseMove={handleCanvasMouseMove} // Use custom handler for pencil
         onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
-        style={{ pointerEvents: 'auto' }}
+        onMouseLeave={handleCanvasMouseLeave} // Use custom handler for pencil
+        style={{ pointerEvents: 'auto', cursor: 'none' }} // Hide default cursor
       />
+
+      {/* Custom Pencil Cursor */}
+      {showPencil && (
+        <img
+          src="https://placehold.co/32x32/000000/FFFFFF?text=✏️" // Placeholder for pencil SVG
+          alt="Pencil Cursor"
+          className="absolute z-50" // High z-index to be on top
+          style={{
+            top: pencilPosition.y,
+            left: pencilPosition.x,
+            pointerEvents: 'none', // Critical: allows clicks/drawing to pass through
+            transform: 'translate(-50%, -50%)', // Center the pencil on the cursor
+          }}
+        />
+      )}
 
       {/* Dynamic Eye SVGs */}
       {eyes.map((eye) => (
@@ -330,13 +367,11 @@ function App() {
             src="https://raw.githubusercontent.com/Raeskaa/studionufab/ec81588c796d013bbd3fcb4d473985d8e0f87a8b/Nufab%20Eye%20White.svg" // Use external SVG
             alt="Eye Icon"
             style={{
-              width: '64px', // Set size
-              height: '64px', // Set size
-              transform: `rotate(${eye.rotation}deg)`, // Apply rotation
-              filter: 'invert(100%)' // Make it white to stand out on dark background
+              width: '128px', // Set size
+              height: '128px', // Set size
             }}
             onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              e.currentTarget.src = "https://placehold.co/64x64/000000/FFFFFF?text=Eye"; // Fallback image
+              e.currentTarget.src = "https://placehold.co/128x128/000000/FFFFFF?text=Eye"; // Fallback image
               console.error("Failed to load Eye SVG icon from URL");
             }}
           />
@@ -352,7 +387,7 @@ function App() {
           left: logoPosition.x,
           width: '180px',
           height: '180px',
-          backgroundColor: '#000000'
+          backgroundColor: '#ffffff'
         }}
         onMouseDown={startDraggingLogo}
         onMouseMove={dragLogo}
@@ -360,7 +395,7 @@ function App() {
         onMouseLeave={stopDraggingLogo}
       >
        <img
-        src="https://raw.githubusercontent.com/Raeskaa/studionufab/main/Group.svg" // Corrected image source URL
+        src="https://raw.githubusercontent.com/Raeskaa/studionufab/ffdd3e0158bd7e83bfb51a14f710792b29061d90/Group.svg" // Corrected image source URL
         alt="Decorative Icon" // Always provide an alt text for accessibility
         className="w-2/3 h-2/3" // Adjust size as needed
         // Optional: Add an onerror handler for fallback if image fails to load
@@ -508,7 +543,7 @@ function App() {
       )}
 
       {/* Mobile Blog Content - Hidden by default for desktop, shown on mobile */}
-      <div className="md:hidden absolute inset-0 bg-white overflow-y-auto p-6 z-30" style={{ display: 'none' }} id="mobile-blog">
+      <div className="md:hidden absolute inset-0 bg-white overflow-y-auto p-6 z-30" id="mobile-blog">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-bold">Blog</h2>
           <div className="flex gap-2">
@@ -527,20 +562,20 @@ function App() {
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold mb-4" style={{ fontFamily: 'Dai Banna SIL, serif' }}>
+        <h1 className="text-3xl font-bold mb-4" style={{ fontFamily: 'dotmatri, serif' }}> {/* Increased size and applied font */}
           {currentPost.title}
         </h1>
-        <h2 className="text-xl mb-4" style={{ fontFamily: 'Sofia Sans, sans-serif' }}>
+        <h2 className="text-xl mb-4" style={{ fontFamily: 'Sofia Sans, sans-serif' }}> {/* Applied font */}
           {currentPost.subtitle}
         </h2>
-        <p className="text-sm mb-6" style={{ fontFamily: 'Courier Prime, monospace' }}>
+        <p className="text-sm mb-6" style={{ fontFamily: 'Courier Prime, monospace' }}> {/* Applied font */}
           {currentPost.date}
         </p>
         <div className="space-y-6">
           {currentPost.content.map((paragraph, index) => (
             <p
               key={index}
-              className="mb-4 leading-relaxed" style={{ fontFamily: 'Sofia Sans, sans-serif' }}>
+              className="mb-4 leading-relaxed" style={{ fontFamily: 'Sofia Sans, sans-serif' }}> {/* Applied font */}
             {paragraph}
             </p>
           ))}
