@@ -37,10 +37,14 @@ function App() {
   const [showScreenshotModal, setShowScreenshotModal] = useState(false);
   const [screenshotDataUrl, setScreenshotDataUrl] = useState('');
 
-  // State for draggable blog frame position
+  // Initial dimensions for the blog frame
+  const initialFrameWidth = window.innerWidth * 0.55;
+  const initialFrameHeight = window.innerHeight * 0.70;
+
+  // State for draggable blog frame position (initial: bottom-right, no margin)
   const [framePosition, setFramePosition] = useState({
-    x: window.innerWidth - (window.innerWidth * 0.55), // Initial left: 100vw - 55vw = 45vw
-    y: window.innerHeight - (window.innerHeight * 0.70), // Initial top: 100vh - 70vh = 30vh
+    x: window.innerWidth - initialFrameWidth,
+    y: window.innerHeight - initialFrameHeight,
   });
 
   // State for draggable logo circle position
@@ -65,6 +69,10 @@ function App() {
   const [pencilPosition, setPencilPosition] = useState({ x: 0, y: 0 });
   const [showPencil, setShowPencil] = useState(false);
 
+  // New states for managing visibility and position of elements after delete
+  const [showBlogContentFrame, setShowBlogContentFrame] = useState(true);
+  const [showNavButtons, setShowNavButtons] = useState(true); // For Chevron buttons and I'm bored
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false); // New state for confirmation modal
 
   const colors = [
     '#1244F1', // Blue
@@ -322,6 +330,22 @@ function App() {
     setIsDraggingLogo(false);
   };
 
+  // --- Delete Blog Function ---
+  const handleDeleteBlogClick = () => {
+    setShowDeleteConfirmationModal(true);
+  };
+
+  const confirmDeleteBlog = () => {
+    setShowBlogContentFrame(false);
+    setShowNavButtons(false); // Hide chevron and "I'm bored" buttons
+
+    setShowDeleteConfirmationModal(false); // Close confirmation modal
+  };
+
+  const abortDeleteBlog = () => {
+    setShowDeleteConfirmationModal(false); // Close confirmation modal
+  };
+
   const currentPost = blogPosts[currentPostIndex];
 
   return (
@@ -340,7 +364,7 @@ function App() {
       {/* Custom Pencil Cursor */}
       {showPencil && (
         <img
-          src="https://placehold.co/32x32/000000/FFFFFF?text=✏️" // Placeholder for pencil SVG
+          src="https://upload.wikimedia.org/wikipedia/commons/4/47/Blue_pencil.svg" // Updated pencil SVG URL
           alt="Pencil Cursor"
           className="absolute z-50" // High z-index to be on top
           style={{
@@ -348,6 +372,10 @@ function App() {
             left: pencilPosition.x,
             pointerEvents: 'none', // Critical: allows clicks/drawing to pass through
             transform: 'translate(-50%, -50%)', // Center the pencil on the cursor
+          }}
+          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+            e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✏️"; // Fallback image
+            console.error("Failed to load Pencil SVG icon from URL");
           }}
         />
       )}
@@ -367,8 +395,9 @@ function App() {
             src="https://raw.githubusercontent.com/Raeskaa/studionufab/ec81588c796d013bbd3fcb4d473985d8e0f87a8b/Nufab%20Eye%20White.svg" // Use external SVG
             alt="Eye Icon"
             style={{
-              width: '128px', // Set size
-              height: '128px', // Set size
+              width: '128px', // Keep size constant
+              height: '128px', // Keep size constant
+              transform: `rotate(${eye.rotation}deg)`, // Apply rotation
             }}
             onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
               e.currentTarget.src = "https://placehold.co/128x128/000000/FFFFFF?text=Eye"; // Fallback image
@@ -406,49 +435,37 @@ function App() {
       />
       </div>
 
-      {/* Navigation Arrows & Color Switcher - Right Side */}
-      <div className="absolute flex gap-2 z-20" style={{
-        bottom: 'calc(70vh + 14px)',
-        right: '2vw'
-      }}>
-        <button
-          onClick={prevPost}
-          className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors"
-        >
-          <ChevronLeft size={16} className="text-black" />
-        </button>
-        <button
-          onClick={nextPost}
-          className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors"
-        >
-          <ChevronRight size={16} className="text-black" />
-        </button>
-        <button
-          onClick={randomizeColor}
-          className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2"
-          title="Randomize background color"
-        >
-          <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>I'm bored</span>
-        </button>
-      </div>
+      {/* Navigation Arrows & Color Switcher (I'm bored) - Fixed position relative to viewport */}
+      {showNavButtons && (
+        <div className="absolute flex gap-2 z-20" style={{
+          bottom: 'calc(70vh + 14px)', // Fixed position relative to viewport
+          right: '2vw', // Fixed position relative to viewport
+        }}>
+          <button
+            onClick={prevPost}
+            className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors"
+          >
+            <ChevronLeft size={16} className="text-black" />
+          </button>
+          <button
+            onClick={nextPost}
+            className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors"
+          >
+            <ChevronRight size={16} className="text-black" />
+          </button>
+          <button
+            onClick={randomizeColor}
+            className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2"
+            title="Randomize background color"
+          >
+            <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>I'm bored</span>
+          </button>
+        </div>
+      )}
 
-      {/* Blog Content Frame - Now Draggable */}
-      <div
-        ref={blogFrameRef}
-        className="absolute bg-white border-2 border-black overflow-y-auto z-30 p-8 cursor-grab" // Increased z-index, added cursor-grab
-        style={{
-          top: framePosition.y,
-          left: framePosition.x,
-          width: '55vw',
-          height: '70vh',
-        }}
-        onMouseDown={startDraggingFrame}
-        onMouseMove={dragFrame}
-        onMouseUp={stopDraggingFrame}
-        onMouseLeave={stopDraggingFrame} // Stop dragging if mouse leaves the window
-      >
-        {/* Screenshot Button - Inside the blog frame, top-left */}
-        <div className="absolute top-4 left-4 z-20">
+      {/* Buttons after deletion (I'm bored and Screenshot) */}
+      {!showBlogContentFrame && (
+        <div className="fixed bottom-5 right-5 flex gap-4 z-40">
           <button
             onClick={handleScreenshot}
             className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
@@ -456,59 +473,129 @@ function App() {
           >
             <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenshot</span>
           </button>
+          <button
+            onClick={randomizeColor}
+            className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+            title="Randomize background color"
+          >
+            <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>I'm bored</span>
+          </button>
         </div>
+      )}
 
-        <h1
-          className="text-black mb-1 leading-tight text-2xl md:text-4xl lg:text-5xl uppercase"
+
+      {/* Blog Content Frame - Conditionally Rendered */}
+      {showBlogContentFrame && (
+        <div
+          ref={blogFrameRef}
+          className="absolute bg-white border-2 border-black overflow-y-auto z-30 p-8 cursor-grab" // Increased z-index, added cursor-grab
           style={{
-            fontFamily: 'dotmatri, serif',
-            fontWeight: '400'
+            top: framePosition.y,
+            left: framePosition.x,
+            width: '55vw',
+            height: '70vh',
           }}
+          onMouseDown={startDraggingFrame}
+          onMouseMove={dragFrame}
+          onMouseUp={stopDraggingFrame}
+          onMouseLeave={stopDraggingFrame} // Stop dragging if mouse leaves the window
         >
-          {currentPost.title}
-        </h1>
-
-        <h2
-          className="text-black mb-6 leading-tight text-sm md:text-lg lg:text-xl" // Changed font size to match body
-          style={{
-            fontFamily: 'Sofia Sans, sans-serif',
-            fontWeight: '400'
-          }}
-        >
-          {currentPost.subtitle}
-        </h2>
-
-        <p
-          className="text-black mb-8 text-xs md:text-sm"
-          style={{
-            fontFamily: 'Courier Prime, monospace',
-            fontWeight: '400'
-          }}
-        >
-          {currentPost.date}
-        </p>
-
-        <div className="space-y-6 pt-4"> {/* Added pt-4 to move content down */}
-          {currentPost.content.map((paragraph, index) => (
-            <p
-              key={index}
-              className="text-black leading-relaxed text-sm md:text-lg lg:text-xl"
-              style={{
-                fontFamily: 'Sofia Sans, sans-serif',
-                fontWeight: '400'
-              }}
+          {/* Screenshot and Delete Buttons - Inside the blog frame, top-left */}
+          <div className="absolute top-4 left-4 flex gap-2 z-20">
+            <button
+              onClick={handleScreenshot}
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              title="Take a screenshot"
             >
-              {paragraph}
-            </p>
-          ))}
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenshot</span>
+            </button>
+            <button
+              onClick={handleDeleteBlogClick} // Call the new handler for confirmation
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              title="Delete Blog Frame"
+            >
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Delete</span>
+            </button>
+          </div>
+
+          <h1
+            className="text-black mb-1 leading-tight text-2xl md:text-4xl lg:text-5xl uppercase"
+            style={{
+              fontFamily: 'dotmatri, serif',
+              fontWeight: '400'
+            }}
+          >
+            {currentPost.title}
+          </h1>
+
+          <h2
+            className="text-black mb-6 leading-tight text-sm md:text-lg lg:text-xl" // Changed font size to match body
+            style={{
+              fontFamily: 'Sofia Sans, sans-serif',
+              fontWeight: '400'
+            }}
+          >
+            {currentPost.subtitle}
+          </h2>
+
+          <p
+            className="text-black mb-8 text-xs md:text-sm"
+            style={{
+              fontFamily: 'Courier Prime, monospace',
+              fontWeight: '400'
+            }}
+          >
+            {currentPost.date}
+          </p>
+
+          <div className="space-y-6 pt-4"> {/* Added pt-4 to move content down */}
+            {currentPost.content.map((paragraph, index) => (
+              <p
+                key={index}
+                className="text-black leading-relaxed text-sm md:text-lg lg:text-xl"
+                style={{
+                  fontFamily: 'Sofia Sans, sans-serif',
+                  fontWeight: '400'
+                }}
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirmationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
+            <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime, monospace' }}>
+              Are you sure you want to delete the blog frame?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={confirmDeleteBlog}
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
+                style={{ fontFamily: 'Courier Prime, monospace' }}
+              >
+                Yes, I love deleting
+              </button>
+              <button
+                onClick={abortDeleteBlog}
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
+                style={{ fontFamily: 'Courier Prime, monospace' }}
+              >
+                Abort
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Screenshot Modal */}
       {showScreenshotModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
-            {/* Updated title text to include all phrases with line breaks */}
             <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime, monospace' }}>
               Art Just Happens. <br/>
               All Yours. <br/>
