@@ -123,8 +123,8 @@ function App() {
 
     inactivityTimeoutRef.current = window.setTimeout(() => {
       addEye(); // Add first eye after 5 seconds
-      eyeIntervalRef.current = window.setInterval(addEye, 2000); // Add subsequent eyes every 2 seconds
-    }, 5000); // 5 seconds for first eye
+      eyeIntervalRef.current = window.setInterval(addEye, 10000); // Add subsequent eyes every 2 seconds
+    }, 30000); // 5 seconds for first eye
   }, [addEye]);
 
   // Effect hook for canvas initialization, resizing, and dynamically loading html2canvas
@@ -329,6 +329,7 @@ function App() {
 
     setIsDraggingFrame(true);
     setIsGrabbing(true); // Show grab cursor
+    setPencilPosition({ x: e.clientX, y: e.clientY }); // Update cursor position immediately
     const rect = blogFrameRef.current.getBoundingClientRect();
     setDragOffsetFrame({
       x: e.clientX - rect.left,
@@ -338,6 +339,9 @@ function App() {
 
   const dragFrame = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isDraggingFrame) return;
+
+    // Update pencilPosition to make grab cursor follow
+    setPencilPosition({ x: e.clientX, y: e.clientY });
 
     setFramePosition({
       x: e.clientX - dragOffsetFrame.x,
@@ -356,6 +360,7 @@ function App() {
 
     setIsDraggingLogo(true);
     setIsGrabbing(true); // Show grab cursor
+    setPencilPosition({ x: e.clientX, y: e.clientY }); // Update cursor position immediately
     const rect = logoCircleRef.current.getBoundingClientRect();
     setDragOffsetLogo({
       x: e.clientX - rect.left,
@@ -365,6 +370,9 @@ function App() {
 
   const dragLogo = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isDraggingLogo) return;
+
+    // Update pencilPosition to make grab cursor follow
+    setPencilPosition({ x: e.clientX, y: e.clientY });
 
     setLogoPosition({
       x: e.clientX - dragOffsetLogo.x,
@@ -411,7 +419,7 @@ function App() {
       {/* Custom Cursor Rendering */}
       {isGrabbing && (
         <img
-          src="" // Grab cursor SVG
+          src="https://raw.githubusercontent.com/Raeskaa/studionufab/b14b17e2dce2b5fff264d91d41c2e787bec30673/Grab%20Cursor.svg" // Grab cursor SVG
           alt="Grab Cursor"
           className="absolute z-50" // High z-index to be on top
           style={{
@@ -479,13 +487,14 @@ function App() {
       {/* Fixed Black Circle (Logo) - Now Draggable */}
       <div
         ref={logoCircleRef}
-        className="absolute rounded-full z-10 flex items-center justify-center cursor-grab"
+        className="absolute rounded-full z-10 flex items-center justify-center" // Removed cursor-grab from className
         style={{
           top: logoPosition.y,
           left: logoPosition.x,
           width: '180px',
           height: '180px',
-          backgroundColor: '#ffffff'
+          backgroundColor: '#ffffff',
+          cursor: isGrabbing ? 'none' : 'grab', // Dynamic cursor
         }}
         onMouseDown={startDraggingLogo}
         onMouseMove={dragLogo}
@@ -557,12 +566,13 @@ function App() {
       {showBlogContentFrame && (
         <div
           ref={blogFrameRef}
-          className="absolute bg-white border-2 border-black overflow-y-auto z-30 p-8 cursor-grab" // Increased z-index, added cursor-grab
+          className="absolute bg-white border-2 border-black overflow-y-auto z-30 p-8" // Removed cursor-grab from className
           style={{
             top: framePosition.y,
             left: framePosition.x,
             width: '55vw',
             height: '70vh',
+            cursor: isGrabbing ? 'none' : 'grab', // Dynamic cursor
           }}
           onMouseDown={startDraggingFrame}
           onMouseMove={dragFrame}
