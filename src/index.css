@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400&family=Sofia+Sans:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dai+Banna+SIL:wght@400&display=swap');
+
+/* Custom cursor for drawing */
+.cursor-crosshair {
+  cursor: crosshair;
+}
+
+/* Ensure canvas doesn't interfere with text selection in blog content */
+canvas {
+  pointer-events: auto;
+}
+
+/* Prevent text selection while drawing */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection in blog content */
+.blog-content {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .blog-content {
+    display: none !important;
+  }
+  
+  #mobile-blog {
+    display: block !important;
+  }
+  
+  canvas {
+    pointer-events: none;
+  }
+}
