@@ -68,6 +68,12 @@ function App() {
   // State for custom pencil cursor
   const [pencilPosition, setPencilPosition] = useState({ x: 0, y: 0 });
   const [showPencil, setShowPencil] = useState(false);
+  const [cursorScale, setCursorScale] = useState(1); // New state for cursor scaling
+  const lastMouseX = useRef(0);
+  const lastMouseY = useRef(0);
+  const lastMouseTime = useRef(0);
+  const cursorResetTimeout = useRef<number | null>(null);
+
 
   // New states for managing visibility and position of elements after delete
   const [showBlogContentFrame, setShowBlogContentFrame] = useState(true);
@@ -216,11 +222,41 @@ function App() {
     const canvas = canvasRef.current;
     if (canvas) {
       const rect = canvas.getBoundingClientRect();
-      setPencilPosition({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
+      const currentX = e.clientX - rect.left;
+      const currentY = e.clientY - rect.top;
+      const currentTime = performance.now();
+
+      setPencilPosition({ x: currentX, y: currentY });
       setShowPencil(true);
+
+      // Calculate speed for dynamic cursor size
+      const dx = currentX - lastMouseX.current;
+      const dy = currentY - lastMouseY.current;
+      const dt = currentTime - lastMouseTime.current;
+
+      if (dt > 0) {
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const speed = distance / dt; // pixels per millisecond
+
+        // Map speed to a scale factor (adjust maxSpeed and minSpeed as needed)
+        const maxSpeed = 2; // Adjust based on typical fast mouse movement
+        const minSpeed = 0.1; // Adjust based on typical slow mouse movement
+        const calculatedScale = 1 + Math.min(1, Math.max(0, (speed - minSpeed) / (maxSpeed - minSpeed))); // Scale from 1 to 2
+
+        setCursorScale(calculatedScale);
+
+        // Clear previous timeout and set a new one to reset cursor size
+        if (cursorResetTimeout.current) {
+          clearTimeout(cursorResetTimeout.current);
+        }
+        cursorResetTimeout.current = window.setTimeout(() => {
+          setCursorScale(1); // Reset to original size after inactivity
+        }, 100); // Reset after 100ms of no movement
+      }
+
+      lastMouseX.current = currentX;
+      lastMouseY.current = currentY;
+      lastMouseTime.current = currentTime;
     }
     // Also pass to drawing function if drawing is active
     draw(e);
@@ -229,6 +265,10 @@ function App() {
   const handleCanvasMouseLeave = () => {
     setShowPencil(false);
     stopDrawing();
+    setCursorScale(1); // Reset cursor size when leaving canvas
+    if (cursorResetTimeout.current) {
+      clearTimeout(cursorResetTimeout.current);
+    }
   };
 
   // --- Blog Post Navigation Functions ---
@@ -371,7 +411,9 @@ function App() {
             top: pencilPosition.y,
             left: pencilPosition.x,
             pointerEvents: 'none', // Critical: allows clicks/drawing to pass through
-            transform: 'translate(-50%, -50%)', // Center the pencil on the cursor
+            transform: `translate(-50%, -50%) scale(${cursorScale})`, // Apply dynamic scale
+            width: '32px', // Base width
+            height: '32px', // Base height
           }}
           onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
             e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✏️"; // Fallback image
@@ -395,12 +437,12 @@ function App() {
             src="https://raw.githubusercontent.com/Raeskaa/studionufab/ec81588c796d013bbd3fcb4d473985d8e0f87a8b/Nufab%20Eye%20White.svg" // Use external SVG
             alt="Eye Icon"
             style={{
-              width: '128px', // Keep size constant
-              height: '128px', // Keep size constant
+              width: '89.6px', // Reduced size to 70% of 128px
+              height: '89.6px', // Reduced size to 70% of 128px
               transform: `rotate(${eye.rotation}deg)`, // Apply rotation
             }}
             onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              e.currentTarget.src = "https://placehold.co/128x128/000000/FFFFFF?text=Eye"; // Fallback image
+              e.currentTarget.src = "https://placehold.co/89x89/000000/FFFFFF?text=Eye"; // Fallback image
               console.error("Failed to load Eye SVG icon from URL");
             }}
           />
@@ -507,14 +549,14 @@ function App() {
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
               title="Take a screenshot"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenshot</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenhot</span>
             </button>
             <button
               onClick={handleDeleteBlogClick} // Call the new handler for confirmation
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
               title="Delete Blog Frame"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Delete</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Dlt</span>
             </button>
           </div>
 
@@ -570,7 +612,7 @@ function App() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
             <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime, monospace' }}>
-              Are you sure you want to delete the blog frame?
+              Delete the blog frame?
             </h3>
             <div className="flex justify-center gap-4">
               <button
@@ -578,7 +620,7 @@ function App() {
                 className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
                 style={{ fontFamily: 'Courier Prime, monospace' }}
               >
-                Yes, I love deleting
+                Yes
               </button>
               <button
                 onClick={abortDeleteBlog}
