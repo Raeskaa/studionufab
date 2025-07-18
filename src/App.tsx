@@ -157,15 +157,16 @@ function App() {
           backgroundColor: '#000000'
         }}
       >
-        {/* SVG Icon - Example: A simple star */}
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          viewBox="0 0 24 24" 
-          fill="white" 
-          className="w-1/2 h-1/2" // Adjust size as needed
-        >
-          <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 18.896l-7.416 3.817 1.48-8.279L.001 9.306l8.332-1.151L12 .587z"/>
-        </svg>
+       <img
+  src="https://raw.githubusercontent.com/Raeskaa/studionufab/refs/heads/main/Asset%203%201.svg"
+  alt="Decorative Icon" // Always provide an alt text for accessibility
+  className="w-3/4 h-3/4" // Adjust size as needed
+  // Optional: Add an onerror handler for fallback if image fails to load
+  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = "https://placehold.co/100x100/000000/FFFFFF?text=Error"; // Fallback image
+    console.error("Failed to load SVG icon from URL");
+  }}
+/>
       </div>
 
       {/* Navigation Arrows - Outside Frame */}
