@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react'; // Fixed: Removed the '=' sign
 
 const blogPosts = [
   {
@@ -29,16 +29,16 @@ function App() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
-  const [backgroundColor, setBackgroundColor] = useState('#e91e63');
+  const [backgroundColor, setBackgroundColor] = useState('#1244F1'); // Changed initial background color to blue
   const [showScreenshotModal, setShowScreenshotModal] = useState(false);
   const [screenshotDataUrl, setScreenshotDataUrl] = useState('');
 
   const colors = [
-    '#1244F1', // Original pink
-    '#FE6416', // Light gray
-    '#FE9FF5', // Yellow
-    '#FF0D01', // Light pink
-    '#5541BA', // Orange
+    '#1244F1', // Blue
+    '#FE6416', // Orange
+    '#FE9FF5', // Pink
+    '#FF0D01', // Red
+    '#5541BA', // Purple
     '#ffffff', // White
   ];
 
@@ -181,10 +181,9 @@ function App() {
     const body = encodeURIComponent('Hello,\n\nPlease find the attached screenshot from the interactive blog app. You may need to manually attach the image file after this email opens.\n\nBest regards,');
     
     // Open mail client
+    alert('Your email client has opened. Please remember to manually attach the screenshot to the email.');
     window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`, '_blank');
     
-    // Provide a message to the user as they need to manually attach the image
-    alert('Your email client has opened. Please remember to manually attach the screenshot to the email.');
     setShowScreenshotModal(false); // Close modal after attempting to email
   };
 
@@ -204,15 +203,15 @@ function App() {
         style={{ pointerEvents: 'auto' }}
       />
 
-      {/* Fixed Black Circle */}
-      <div 
+      {/* Fixed Black Circle (Logo) */}
+      <div
         className="absolute rounded-full z-10 flex items-center justify-center" // Added flex for centering SVG
         style={{
-          top: '80px',
-          left: '400px', // Changed from right to left
-          width: '120px',
-          height: '120px',
-          backgroundColor: '#000000'
+          top: '160px', // Moved further down
+          left: '480px', // Moved further right
+          width: '180px', // Increased size
+          height: '180px', // Increased size
+          backgroundColor: '#ffffff'
         }}
       >
        <img
@@ -228,25 +227,25 @@ function App() {
       </div>
 
       {/* Navigation Arrows & Color Switcher - Right Side */}
-      <div className="absolute flex gap-2 z-20" style={{ 
-        bottom: 'calc(70vh + 14px)', 
-        right: '2vw' 
+      <div className="absolute flex gap-2 z-20" style={{
+        bottom: 'calc(70vh + 14px)',
+        right: '2vw'
       }}>
-        <button 
+        <button
           onClick={prevPost}
           className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors"
         >
           <ChevronLeft size={16} className="text-black" />
         </button>
-        <button 
+        <button
           onClick={nextPost}
           className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors"
         >
           <ChevronRight size={16} className="text-black" />
         </button>
-        <button 
+        <button
           onClick={randomizeColor}
-          className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2" 
+          className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2"
           title="Randomize background color"
         >
           <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>I'm bored</span>
@@ -254,7 +253,7 @@ function App() {
       </div>
 
       {/* Blog Content Frame */}
-      <div 
+      <div
         className="absolute bg-white border-2 border-black overflow-y-auto z-20 p-8"
         style={{
           bottom: '0vh',
@@ -264,8 +263,8 @@ function App() {
         }}
       >
         {/* Screenshot Button - Inside the blog frame, top-left */}
-        <div className="absolute top-4 left-4 z-20"> 
-          <button 
+        <div className="absolute top-4 left-4 z-20">
+          <button
             onClick={handleScreenshot}
             className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
             title="Take a screenshot"
@@ -274,44 +273,43 @@ function App() {
           </button>
         </div>
 
-        <h1 
-          className="text-black mb-3 leading-tight text-2xl md:text-4xl lg:text-5xl"
-          style={{ 
-            fontFamily: 'dotmatri, serif', 
+        <h1
+          className="text-black mb-1 leading-tight text-2xl md:text-4xl lg:text-5xl uppercase"
+          style={{
+            fontFamily: 'dotmatri, serif',
             fontWeight: '400'
           }}
         >
           {currentPost.title}
         </h1>
-        
-        <h2 
-          className="text-black mb-6 leading-tight"
-          style={{ 
-            fontFamily: 'Sofia Sans, sans-serif', 
-            fontWeight: '400',
-            fontSize: '24px'
+
+        <h2
+          className="text-black mb-6 leading-tight text-sm md:text-lg lg:text-xl" // Changed font size to match body
+          style={{
+            fontFamily: 'Sofia Sans, sans-serif',
+            fontWeight: '400'
           }}
         >
           {currentPost.subtitle}
         </h2>
-        
-        <p 
+
+        <p
           className="text-black mb-8 text-xs md:text-sm"
-          style={{ 
-            fontFamily: 'Courier Prime, monospace', 
+          style={{
+            fontFamily: 'Courier Prime, monospace',
             fontWeight: '400'
           }}
         >
           {currentPost.date}
         </p>
-        
-        <div className="space-y-6">
+
+        <div className="space-y-6 pt-4"> {/* Added pt-4 to move content down */}
           {currentPost.content.map((paragraph, index) => (
-            <p 
+            <p
               key={index}
               className="text-black leading-relaxed text-sm md:text-lg lg:text-xl"
-              style={{ 
-                fontFamily: 'Sofia Sans, sans-serif', 
+              style={{
+                fontFamily: 'Sofia Sans, sans-serif',
                 fontWeight: '400'
               }}
             >
@@ -326,18 +324,17 @@ function App() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center border border-black">
             <h3 className="text-lg font-bold mb-4" style={{ fontFamily: 'Courier Prime, monospace' }}>Screenshot Captured!</h3>
-            {/* Removed the line "What would you like to do with it?" */}
             <div className="flex justify-center gap-4">
               <button
                 onClick={downloadScreenshot}
-                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors" // Styled like Close button
+                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors"
                 style={{ fontFamily: 'Courier Prime, monospace' }}
               >
                 Download
               </button>
               <button
                 onClick={emailScreenshot}
-                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors" // Styled like Close button
+                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors"
                 style={{ fontFamily: 'Courier Prime, monospace' }}
               >
                 Email
@@ -359,13 +356,13 @@ function App() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-bold">Blog</h2>
           <div className="flex gap-2">
-            <button 
+            <button
               onClick={prevPost}
               className="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
             >
               <ChevronLeft size={16} />
             </button>
-            <button 
+            <button
               onClick={nextPost}
               className="w-8 h-8 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center"
             >
@@ -373,7 +370,7 @@ function App() {
             </button>
           </div>
         </div>
-        
+
         <h1 className="text-2xl font-bold mb-4" style={{ fontFamily: 'Dai Banna SIL, serif' }}>
           {currentPost.title}
         </h1>
@@ -385,15 +382,10 @@ function App() {
         </p>
         <div className="space-y-6">
           {currentPost.content.map((paragraph, index) => (
-            <p 
+            <p
               key={index}
-              className="text-black leading-relaxed text-sm md:text-lg lg:text-xl"
-              style={{ 
-                fontFamily: 'Sofia Sans, sans-serif', 
-                fontWeight: '400'
-              }}
-            >
-              {paragraph}
+              className="mb-4 leading-relaxed" style={{ fontFamily: 'Sofia Sans, sans-serif' }}>
+            {paragraph}
             </p>
           ))}
         </div>
