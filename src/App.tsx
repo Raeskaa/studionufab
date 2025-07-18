@@ -160,7 +160,7 @@ function App() {
        <img
   src="https://raw.githubusercontent.com/Raeskaa/studionufab/refs/heads/main/Asset%203%201.svg"
   alt="Decorative Icon" // Always provide an alt text for accessibility
-  className="w-3/4 h-3/4" // Adjust size as needed
+  className="w-2/3 h-2/3" // Adjust size as needed
   // Optional: Add an onerror handler for fallback if image fails to load
   onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "https://placehold.co/100x100/000000/FFFFFF?text=Error"; // Fallback image
