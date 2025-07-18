@@ -74,6 +74,9 @@ function App() {
   const lastMouseTime = useRef(0);
   const cursorResetTimeout = useRef<number | null>(null);
 
+  // New state for grab cursor
+  const [isGrabbing, setIsGrabbing] = useState(false);
+
 
   // New states for managing visibility and position of elements after delete
   const [showBlogContentFrame, setShowBlogContentFrame] = useState(true);
@@ -325,6 +328,7 @@ function App() {
     if (!blogFrameRef.current) return;
 
     setIsDraggingFrame(true);
+    setIsGrabbing(true); // Show grab cursor
     const rect = blogFrameRef.current.getBoundingClientRect();
     setDragOffsetFrame({
       x: e.clientX - rect.left,
@@ -343,6 +347,7 @@ function App() {
 
   const stopDraggingFrame = () => {
     setIsDraggingFrame(false);
+    setIsGrabbing(false); // Hide grab cursor
   };
 
   // --- Draggable Logo Circle Functions ---
@@ -350,6 +355,7 @@ function App() {
     if (!logoCircleRef.current) return;
 
     setIsDraggingLogo(true);
+    setIsGrabbing(true); // Show grab cursor
     const rect = logoCircleRef.current.getBoundingClientRect();
     setDragOffsetLogo({
       x: e.clientX - rect.left,
@@ -368,6 +374,7 @@ function App() {
 
   const stopDraggingLogo = () => {
     setIsDraggingLogo(false);
+    setIsGrabbing(false); // Hide grab cursor
   };
 
   // --- Delete Blog Function ---
@@ -401,8 +408,28 @@ function App() {
         style={{ pointerEvents: 'auto', cursor: 'none' }} // Hide default cursor
       />
 
-      {/* Custom Pencil Cursor */}
-      {showPencil && (
+      {/* Custom Cursor Rendering */}
+      {isGrabbing && (
+        <img
+          src="" // Grab cursor SVG
+          alt="Grab Cursor"
+          className="absolute z-50" // High z-index to be on top
+          style={{
+            top: pencilPosition.y, // Use pencilPosition for consistency
+            left: pencilPosition.x, // Use pencilPosition for consistency
+            pointerEvents: 'none', // Critical: allows clicks/drawing to pass through
+            transform: 'translate(-50%, -50%)', // Center the cursor
+            width: '32px', // Fixed size for grab cursor
+            height: '32px', // Fixed size for grab cursor
+          }}
+          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+            e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✋"; // Fallback image
+            console.error("Failed to load Grab SVG icon from URL");
+          }}
+        />
+      )}
+
+      {!isGrabbing && showPencil && ( // Only show pencil if not grabbing
         <img
           src="https://raw.githubusercontent.com/Raeskaa/studionufab/59d263299b8c3990bd561abbd995c9f13409b6ac/Cursor%20for%20Blog.svg" // Updated pencil SVG URL
           alt="Pencil Cursor"
@@ -549,14 +576,14 @@ function App() {
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
               title="Take a screenshot"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenhot</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenshot</span>
             </button>
             <button
               onClick={handleDeleteBlogClick} // Call the new handler for confirmation
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
               title="Delete Blog Frame"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Dlt</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Delete</span>
             </button>
           </div>
 
