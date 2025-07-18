@@ -327,7 +327,7 @@ function App() {
           }}
         >
           <img
-            src="https://raw.githubusercontent.com/Raeskaa/studionufab/main/Nufab0Eye.svg" // Use external SVG
+            src="https://raw.githubusercontent.com/Raeskaa/studionufab/9463ef1506499b7a80aff02b374104fc01e76e65/Nufab%20Eye%20%20copy.svg" // Use external SVG
             alt="Eye Icon"
             style={{
               width: '64px', // Set size
