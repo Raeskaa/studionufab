@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const blogPosts = [
@@ -24,14 +24,45 @@ const blogPosts = [
   }
 ];
 
+// Removed the EyeSVG component as we are now using an external SVG image
+
+
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const blogFrameRef = useRef<HTMLDivElement>(null); // Ref for the blog frame
+  const logoCircleRef = useRef<HTMLDivElement>(null); // Ref for the logo circle
+
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#1244F1'); // Changed initial background color to blue
   const [showScreenshotModal, setShowScreenshotModal] = useState(false);
   const [screenshotDataUrl, setScreenshotDataUrl] = useState('');
+
+  // State for draggable blog frame position
+  const [framePosition, setFramePosition] = useState({
+    x: window.innerWidth - (window.innerWidth * 0.55), // Initial left: 100vw - 55vw = 45vw
+    y: window.innerHeight - (window.innerHeight * 0.70), // Initial top: 100vh - 70vh = 30vh
+  });
+
+  // State for draggable logo circle position
+  const [logoPosition, setLogoPosition] = useState({
+    x: 480, // Initial left
+    y: 160, // Initial top
+  });
+
+  const [isDraggingFrame, setIsDraggingFrame] = useState(false);
+  const [dragOffsetFrame, setDragOffsetFrame] = useState({ x: 0, y: 0 }); // Offset for blog frame
+
+  const [isDraggingLogo, setIsDraggingLogo] = useState(false);
+  const [dragOffsetLogo, setDragOffsetLogo] = useState({ x: 0, y: 0 }); // Offset for logo circle
+
+  // State for inactivity eyes feature
+  // Added 'rotation' property to the eye object
+  const [eyes, setEyes] = useState<{ id: number; x: number; y: number; rotation: number }[]>([]);
+  const inactivityTimeoutRef = useRef<number | null>(null);
+  const eyeIntervalRef = useRef<number | null>(null);
+  let eyeIdCounter = useRef(0);
 
   const colors = [
     '#1244F1', // Blue
@@ -51,6 +82,31 @@ function App() {
     } while (newIndex === currentIndex);
     setBackgroundColor(colors[newIndex]);
   };
+
+  // Function to add a new eye at a random position with random rotation
+  const addEye = useCallback(() => {
+    const padding = 50; // Keep eyes away from edges
+    const x = Math.random() * (window.innerWidth - padding * 2) + padding;
+    const y = Math.random() * (window.innerHeight - padding * 2) + padding;
+    const rotation = Math.random() * 360; // Random rotation between 0 and 360 degrees
+    setEyes((prevEyes) => [...prevEyes, { id: eyeIdCounter.current++, x, y, rotation }]);
+  }, []);
+
+  // Function to reset all inactivity timers
+  const resetInactivityTimer = useCallback(() => {
+    if (inactivityTimeoutRef.current) {
+      clearTimeout(inactivityTimeoutRef.current);
+    }
+    if (eyeIntervalRef.current) {
+      clearInterval(eyeIntervalRef.current);
+      setEyes([]); // Clear existing eyes when activity resumes
+    }
+
+    inactivityTimeoutRef.current = window.setTimeout(() => {
+      addEye(); // Add first eye after 5 seconds
+      eyeIntervalRef.current = window.setInterval(addEye, 2000); // Add subsequent eyes every 2 seconds
+    }, 5000); // 5 seconds for first eye
+  }, [addEye]);
 
   // Effect hook for canvas initialization, resizing, and dynamically loading html2canvas
   useEffect(() => {
@@ -83,16 +139,33 @@ function App() {
     };
     document.body.appendChild(script);
 
+    // Setup inactivity listeners
+    const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart'];
+    activityEvents.forEach(event => {
+      window.addEventListener(event, resetInactivityTimer);
+    });
+
+    resetInactivityTimer(); // Start the initial inactivity timer
+
     // Cleanup function to remove event listeners and the dynamically added script
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
+      activityEvents.forEach(event => {
+        window.removeEventListener(event, resetInactivityTimer);
+      });
+      if (inactivityTimeoutRef.current) {
+        clearTimeout(inactivityTimeoutRef.current);
+      }
+      if (eyeIntervalRef.current) {
+        clearInterval(eyeIntervalRef.current);
+      }
     };
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, [resetInactivityTimer]); // Depend on resetInactivityTimer
 
-  // Function to start drawing
+  // --- Drawing Functions ---
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -105,7 +178,6 @@ function App() {
     setLastPosition({ x, y });
   };
 
-  // Function to handle drawing movement
   const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
 
@@ -125,32 +197,28 @@ function App() {
     setLastPosition({ x, y }); // Update last position
   };
 
-  // Function to stop drawing
   const stopDrawing = () => {
     setIsDrawing(false);
   };
 
-  // Function to navigate to the next blog post
+  // --- Blog Post Navigation Functions ---
   const nextPost = () => {
     setCurrentPostIndex((prev) => (prev + 1) % blogPosts.length);
   };
 
-  // Function to navigate to the previous blog post
   const prevPost = () => {
     setCurrentPostIndex((prev) => (prev - 1 + blogPosts.length) % blogPosts.length);
   };
 
-  // Function to handle screenshot capture
+  // --- Screenshot Functions ---
   const handleScreenshot = async () => {
     if (typeof (window as any).html2canvas === 'undefined') {
       console.error('html2canvas is not loaded.');
-      // Provide a user-friendly message instead of alert
       alert('Screenshot functionality is not ready yet. Please try again in a moment.');
       return;
     }
 
     try {
-      // Capture the entire document body
       const canvas = await (window as any).html2canvas(document.body);
       const dataUrl = canvas.toDataURL('image/png');
       setScreenshotDataUrl(dataUrl);
@@ -161,7 +229,6 @@ function App() {
     }
   };
 
-  // Function to download the screenshot
   const downloadScreenshot = () => {
     const link = document.createElement('a');
     link.href = screenshotDataUrl;
@@ -169,25 +236,70 @@ function App() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setShowScreenshotModal(false); // Close modal after download
+    setShowScreenshotModal(false);
   };
 
-  // Function to open email client with pre-filled email
   const emailScreenshot = () => {
-    // Note: Direct attachment of data URL to mailto is not reliably supported or practical
-    // due to URL length limits and security. Users will need to attach manually.
     const emailAddress = 'hello@nufab.in';
     const subject = encodeURIComponent('Screenshot from Blog App');
     const body = encodeURIComponent('Hello,\n\nPlease find the attached screenshot from the interactive blog app. You may need to manually attach the image file after this email opens.\n\nBest regards,');
     
-    // Open mail client
     alert('Your email client has opened. Please remember to manually attach the screenshot to the email.');
     window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`, '_blank');
     
-    setShowScreenshotModal(false); // Close modal after attempting to email
+    setShowScreenshotModal(false);
   };
 
-  // Get the current blog post based on the index
+  // --- Draggable Frame Functions ---
+  const startDraggingFrame = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!blogFrameRef.current) return;
+
+    setIsDraggingFrame(true);
+    const rect = blogFrameRef.current.getBoundingClientRect();
+    setDragOffsetFrame({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const dragFrame = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDraggingFrame) return;
+
+    setFramePosition({
+      x: e.clientX - dragOffsetFrame.x,
+      y: e.clientY - dragOffsetFrame.y,
+    });
+  };
+
+  const stopDraggingFrame = () => {
+    setIsDraggingFrame(false);
+  };
+
+  // --- Draggable Logo Circle Functions ---
+  const startDraggingLogo = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!logoCircleRef.current) return;
+
+    setIsDraggingLogo(true);
+    const rect = logoCircleRef.current.getBoundingClientRect();
+    setDragOffsetLogo({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  const dragLogo = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDraggingLogo) return;
+
+    setLogoPosition({
+      x: e.clientX - dragOffsetLogo.x,
+      y: e.clientY - dragOffsetLogo.y,
+    });
+  };
+
+  const stopDraggingLogo = () => {
+    setIsDraggingLogo(false);
+  };
+
   const currentPost = blogPosts[currentPostIndex];
 
   return (
@@ -203,16 +315,49 @@ function App() {
         style={{ pointerEvents: 'auto' }}
       />
 
-      {/* Fixed Black Circle (Logo) */}
+      {/* Dynamic Eye SVGs */}
+      {eyes.map((eye) => (
+        <div
+          key={eye.id}
+          className="absolute z-20" // Z-index below blog frame but above canvas
+          style={{
+            top: eye.y,
+            left: eye.x,
+            pointerEvents: 'none', // Allow clicks to pass through to elements below
+          }}
+        >
+          <img
+            src="https://raw.githubusercontent.com/Raeskaa/studionufab/main/Nufab0Eye.svg" // Use external SVG
+            alt="Eye Icon"
+            style={{
+              width: '64px', // Set size
+              height: '64px', // Set size
+              transform: `rotate(${eye.rotation}deg)`, // Apply rotation
+              filter: 'invert(100%)' // Make it white to stand out on dark background
+            }}
+            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+              e.currentTarget.src = "https://placehold.co/64x64/000000/FFFFFF?text=Eye"; // Fallback image
+              console.error("Failed to load Eye SVG icon from URL");
+            }}
+          />
+        </div>
+      ))}
+
+      {/* Fixed Black Circle (Logo) - Now Draggable */}
       <div
-        className="absolute rounded-full z-10 flex items-center justify-center" // Added flex for centering SVG
+        ref={logoCircleRef}
+        className="absolute rounded-full z-10 flex items-center justify-center cursor-grab"
         style={{
-          top: '160px', // Moved further down
-          left: '480px', // Moved further right
-          width: '180px', // Increased size
-          height: '180px', // Increased size
-          backgroundColor: '#ffffff'
+          top: logoPosition.y,
+          left: logoPosition.x,
+          width: '180px',
+          height: '180px',
+          backgroundColor: '#000000'
         }}
+        onMouseDown={startDraggingLogo}
+        onMouseMove={dragLogo}
+        onMouseUp={stopDraggingLogo}
+        onMouseLeave={stopDraggingLogo}
       >
        <img
         src="https://raw.githubusercontent.com/Raeskaa/studionufab/main/Group.svg" // Corrected image source URL
@@ -252,15 +397,20 @@ function App() {
         </button>
       </div>
 
-      {/* Blog Content Frame */}
+      {/* Blog Content Frame - Now Draggable */}
       <div
-        className="absolute bg-white border-2 border-black overflow-y-auto z-20 p-8"
+        ref={blogFrameRef}
+        className="absolute bg-white border-2 border-black overflow-y-auto z-30 p-8 cursor-grab" // Increased z-index, added cursor-grab
         style={{
-          bottom: '0vh',
-          right: '0vw',
+          top: framePosition.y,
+          left: framePosition.x,
           width: '55vw',
-          height: '70vh'
+          height: '70vh',
         }}
+        onMouseDown={startDraggingFrame}
+        onMouseMove={dragFrame}
+        onMouseUp={stopDraggingFrame}
+        onMouseLeave={stopDraggingFrame} // Stop dragging if mouse leaves the window
       >
         {/* Screenshot Button - Inside the blog frame, top-left */}
         <div className="absolute top-4 left-4 z-20">
@@ -322,26 +472,32 @@ function App() {
       {/* Screenshot Modal */}
       {showScreenshotModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center border border-black">
-            <h3 className="text-lg font-bold mb-4" style={{ fontFamily: 'Courier Prime, monospace' }}>Screenshot Captured!</h3>
+          <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
+            {/* Updated title text to include all phrases with line breaks */}
+            <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime, monospace' }}>
+              Art Just Happens. <br/>
+              All Yours. <br/>
+              This One’s a Keeper <br/>
+              Caught you creating 👀
+            </h3>
             <div className="flex justify-center gap-4">
               <button
                 onClick={downloadScreenshot}
-                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors"
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
                 style={{ fontFamily: 'Courier Prime, monospace' }}
               >
-                Download
+                Save
               </button>
               <button
                 onClick={emailScreenshot}
-                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors"
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
                 style={{ fontFamily: 'Courier Prime, monospace' }}
               >
-                Email
+                Share
               </button>
               <button
                 onClick={() => setShowScreenshotModal(false)}
-                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors"
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
                 style={{ fontFamily: 'Courier Prime, monospace' }}
               >
                 Close
