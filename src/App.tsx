@@ -158,7 +158,7 @@ function App() {
         }}
       >
        <img
-  src="https://raw.githubusercontent.com/Raeskaa/studionufab/refs/heads/main/Asset%203%201.svg"
+  src="https://raw.githubusercontent.com/Raeskaa/studionufab/refs/heads/main/Group.svg"
   alt="Decorative Icon" // Always provide an alt text for accessibility
   className="w-2/3 h-2/3" // Adjust size as needed
   // Optional: Add an onerror handler for fallback if image fails to load
@@ -199,7 +199,7 @@ function App() {
         className="absolute bg-white border-2 border-black overflow-y-auto z-20 p-8"
         style={{
           bottom: '0vh',
-          left: '0vw',
+          right: '0vw',
           width: '55vw',
           height: '70vh'
         }}
