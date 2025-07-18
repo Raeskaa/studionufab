@@ -215,7 +215,7 @@ function App() {
         }}
       >
        <img
-        src="https://raw.githubusercontent.com/Raeskaa/studionufab/refs/heads/main/Group.svg" // Updated image source
+        src="https://raw.githubusercontent.com/Raeskaa/studionufab/aec340de102733b51ca9d4e94c488b89a3a361da/Group.svg" // Updated image source
         alt="Decorative Icon" // Always provide an alt text for accessibility
         className="w-2/3 h-2/3" // Adjust size as needed
         // Optional: Add an onerror handler for fallback if image fails to load
