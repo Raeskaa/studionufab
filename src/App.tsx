@@ -8,20 +8,11 @@ const blogPosts = [
     date: "24 July 2025",
     content: [
       "The first question asked in all design colleges is \"what is the difference between art and design?\" and following it is the holy revelation of the separation — functionality. This piece of information slips almost boastingly off the design educator's tongue – Design is functional, Art is merely expressive. Design is selfless, Art is selfish. Design facilitates, Art just is.",
-      "We are passionate anti-believers of the existence of this border. Don't get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organized paths in creative fields. But this sort of organization is simply like well-treaded paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design.",
+      "We are passionate anti-believers of the existence of this border. Don't get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organized paths in creative fields. But this sort of organization is simply like well-trodden paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design.",
       "The first question asked in all design colleges is \"what is the difference between art and design?\" and following it is the holy revelation of the separation — functionality. This piece of information slips almost boastingly off the design educator's tongue – Design is functional, Art is merely expressive. Design is selfless, Art is selfish. Design facilitates, Art just is.",
-      "We are passionate anti-believers of the existence of this border. Don't get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organized paths in creative fields. But this sort of organization is simply like well-treaded paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design."
+      "We are passionate anti-believers of the existence of this border. Don't get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organized paths in creative fields. But this sort of organization is simply like well-trodden paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design."
     ]
   },
-// 
-//    title: "The evolution of digital creativity",
- //   subtitle: "How technology reshapes artistic expression",
-   // date: "15 July 2025",
-   // content: [
-   //   "Digital tools have fundamentally transformed how we approach creative work. What once required physical materials and extensive setup can now be accomplished with a few clicks and gestures. This democratization of creative tools has opened new possibilities for expression and experimentation.",
-    //  "However, with this accessibility comes new challenges. The abundance of options can be overwhelming, and the ease of creation sometimes leads to a devaluation of the creative process. The question becomes: how do we maintain the essence of craftsmanship in a digital age?"
-  //  ]S
-  //},
   {
     title: "Minimalism in modern design",
     subtitle: "The power of intentional simplicity",
@@ -39,16 +30,19 @@ function App() {
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState('#e91e63');
+  const [showScreenshotModal, setShowScreenshotModal] = useState(false);
+  const [screenshotDataUrl, setScreenshotDataUrl] = useState('');
 
   const colors = [
-    '#e91e63', // Original pink
-    '#f8f9fa', // Light gray
-    '#FFCE01', // Yellow
-    '#FFA2CE', // Light pink
-    '#FF9902', // Orange
-    '#f44336'  // Red
+    '#1244F1', // Original pink
+    '#FE6416', // Light gray
+    '#FE9FF5', // Yellow
+    '#FF0D01', // Light pink
+    '#5541BA', // Orange
+    '#ffffff', // White
   ];
 
+  // Function to randomize the background color, ensuring it's not the same as the current one
   const randomizeColor = () => {
     const currentIndex = colors.indexOf(backgroundColor);
     let newIndex;
@@ -58,31 +52,47 @@ function App() {
     setBackgroundColor(colors[newIndex]);
   };
 
+  // Effect hook for canvas initialization, resizing, and dynamically loading html2canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // Function to resize canvas to full window dimensions
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
 
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas(); // Initial resize
+    window.addEventListener('resize', resizeCanvas); // Add resize listener
 
     const ctx = canvas.getContext('2d');
     if (ctx) {
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#000000'; // Set stroke color to black
+      ctx.lineWidth = 2;           // Set line width
+      ctx.lineCap = 'round';       // Set line cap style
+      ctx.lineJoin = 'round';      // Set line join style
     }
 
+    // Dynamically load html2canvas library
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    script.async = true;
+    script.onload = () => {
+      console.log('html2canvas loaded');
+    };
+    document.body.appendChild(script);
+
+    // Cleanup function to remove event listeners and the dynamically added script
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
     };
-  }, []);
+  }, []); // Empty dependency array ensures this runs once on mount
 
+  // Function to start drawing
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -95,12 +105,9 @@ function App() {
     setLastPosition({ x, y });
   };
 
+  // Function to handle drawing movement
   const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
-
-    // Prevent drawing in the blog frame area (starts at 45% of screen width from left)
-    const blogFrameRight = window.innerWidth * 0.45;
-    if (e.clientX <= blogFrameRight) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
@@ -110,26 +117,78 @@ function App() {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    ctx.beginPath();
-    ctx.moveTo(lastPosition.x, lastPosition.y);
-    ctx.lineTo(x, y);
-    ctx.stroke();
+    ctx.beginPath(); // Start a new path
+    ctx.moveTo(lastPosition.x, lastPosition.y); // Move to the last recorded position
+    ctx.lineTo(x, y); // Draw a line to the current position
+    ctx.stroke(); // Render the line
 
-    setLastPosition({ x, y });
+    setLastPosition({ x, y }); // Update last position
   };
 
+  // Function to stop drawing
   const stopDrawing = () => {
     setIsDrawing(false);
   };
 
+  // Function to navigate to the next blog post
   const nextPost = () => {
     setCurrentPostIndex((prev) => (prev + 1) % blogPosts.length);
   };
 
+  // Function to navigate to the previous blog post
   const prevPost = () => {
     setCurrentPostIndex((prev) => (prev - 1 + blogPosts.length) % blogPosts.length);
   };
 
+  // Function to handle screenshot capture
+  const handleScreenshot = async () => {
+    if (typeof (window as any).html2canvas === 'undefined') {
+      console.error('html2canvas is not loaded.');
+      // Provide a user-friendly message instead of alert
+      alert('Screenshot functionality is not ready yet. Please try again in a moment.');
+      return;
+    }
+
+    try {
+      // Capture the entire document body
+      const canvas = await (window as any).html2canvas(document.body);
+      const dataUrl = canvas.toDataURL('image/png');
+      setScreenshotDataUrl(dataUrl);
+      setShowScreenshotModal(true);
+    } catch (error) {
+      console.error('Error capturing screenshot:', error);
+      alert('Failed to capture screenshot. Please try again.');
+    }
+  };
+
+  // Function to download the screenshot
+  const downloadScreenshot = () => {
+    const link = document.createElement('a');
+    link.href = screenshotDataUrl;
+    link.download = 'blog_screenshot.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setShowScreenshotModal(false); // Close modal after download
+  };
+
+  // Function to open email client with pre-filled email
+  const emailScreenshot = () => {
+    // Note: Direct attachment of data URL to mailto is not reliably supported or practical
+    // due to URL length limits and security. Users will need to attach manually.
+    const emailAddress = 'hello@nufab.in';
+    const subject = encodeURIComponent('Screenshot from Blog App');
+    const body = encodeURIComponent('Hello,\n\nPlease find the attached screenshot from the interactive blog app. You may need to manually attach the image file after this email opens.\n\nBest regards,');
+    
+    // Open mail client
+    window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`, '_blank');
+    
+    // Provide a message to the user as they need to manually attach the image
+    alert('Your email client has opened. Please remember to manually attach the screenshot to the email.');
+    setShowScreenshotModal(false); // Close modal after attempting to email
+  };
+
+  // Get the current blog post based on the index
   const currentPost = blogPosts[currentPostIndex];
 
   return (
@@ -145,34 +204,33 @@ function App() {
         style={{ pointerEvents: 'auto' }}
       />
 
-
       {/* Fixed Black Circle */}
       <div 
         className="absolute rounded-full z-10 flex items-center justify-center" // Added flex for centering SVG
         style={{
           top: '80px',
-          right: '400px',
+          left: '400px', // Changed from right to left
           width: '120px',
           height: '120px',
           backgroundColor: '#000000'
         }}
       >
        <img
-  src="https://raw.githubusercontent.com/Raeskaa/studionufab/refs/heads/main/Group.svg"
-  alt="Decorative Icon" // Always provide an alt text for accessibility
-  className="w-2/3 h-2/3" // Adjust size as needed
-  // Optional: Add an onerror handler for fallback if image fails to load
-  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = "https://placehold.co/100x100/000000/FFFFFF?text=Error"; // Fallback image
-    console.error("Failed to load SVG icon from URL");
-  }}
-/>
+        src="https://raw.githubusercontent.com/Raeskaa/studionufab/refs/heads/main/Group.svg" // Updated image source
+        alt="Decorative Icon" // Always provide an alt text for accessibility
+        className="w-2/3 h-2/3" // Adjust size as needed
+        // Optional: Add an onerror handler for fallback if image fails to load
+        onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+          e.currentTarget.src = "https://placehold.co/100x100/000000/FFFFFF?text=Error"; // Fallback image
+          console.error("Failed to load SVG icon from URL");
+        }}
+      />
       </div>
 
-      {/* Navigation Arrows - Outside Frame */}
+      {/* Navigation Arrows & Color Switcher - Right Side */}
       <div className="absolute flex gap-2 z-20" style={{ 
         bottom: 'calc(70vh + 14px)', 
-        left: '2vw'
+        right: '2vw' 
       }}>
         <button 
           onClick={prevPost}
@@ -188,9 +246,10 @@ function App() {
         </button>
         <button 
           onClick={randomizeColor}
-          className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2"
+          className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2" 
           title="Randomize background color"
         >
+          <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>I'm bored</span>
         </button>
       </div>
 
@@ -204,10 +263,21 @@ function App() {
           height: '70vh'
         }}
       >
+        {/* Screenshot Button - Inside the blog frame, top-left */}
+        <div className="absolute top-4 left-4 z-20"> 
+          <button 
+            onClick={handleScreenshot}
+            className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+            title="Take a screenshot"
+          >
+            <span className="text-black" style={{ fontFamily: 'Courier Prime, monospace', fontSize: '0.875rem' }}>Screenshot</span>
+          </button>
+        </div>
+
         <h1 
           className="text-black mb-3 leading-tight text-2xl md:text-4xl lg:text-5xl"
           style={{ 
-            fontFamily: 'Dai Banna SIL, serif', 
+            fontFamily: 'dotmatri, serif', 
             fontWeight: '400'
           }}
         >
@@ -251,7 +321,40 @@ function App() {
         </div>
       </div>
 
-      {/* Mobile Blog Content */}
+      {/* Screenshot Modal */}
+      {showScreenshotModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center border border-black">
+            <h3 className="text-lg font-bold mb-4" style={{ fontFamily: 'Courier Prime, monospace' }}>Screenshot Captured!</h3>
+            {/* Removed the line "What would you like to do with it?" */}
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={downloadScreenshot}
+                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors" // Styled like Close button
+                style={{ fontFamily: 'Courier Prime, monospace' }}
+              >
+                Download
+              </button>
+              <button
+                onClick={emailScreenshot}
+                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors" // Styled like Close button
+                style={{ fontFamily: 'Courier Prime, monospace' }}
+              >
+                Email
+              </button>
+              <button
+                onClick={() => setShowScreenshotModal(false)}
+                className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded transition-colors"
+                style={{ fontFamily: 'Courier Prime, monospace' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Blog Content - Hidden by default for desktop, shown on mobile */}
       <div className="md:hidden absolute inset-0 bg-white overflow-y-auto p-6 z-30" style={{ display: 'none' }} id="mobile-blog">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg font-bold">Blog</h2>
@@ -280,11 +383,20 @@ function App() {
         <p className="text-sm mb-6" style={{ fontFamily: 'Courier Prime, monospace' }}>
           {currentPost.date}
         </p>
-        {currentPost.content.map((paragraph, index) => (
-          <p key={index} className="mb-4 leading-relaxed" style={{ fontFamily: 'Sofia Sans, sans-serif' }}>
-            {paragraph}
-          </p>
-        ))}
+        <div className="space-y-6">
+          {currentPost.content.map((paragraph, index) => (
+            <p 
+              key={index}
+              className="text-black leading-relaxed text-sm md:text-lg lg:text-xl"
+              style={{ 
+                fontFamily: 'Sofia Sans, sans-serif', 
+                fontWeight: '400'
+              }}
+            >
+              {paragraph}
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   );
