@@ -1394,11 +1394,11 @@ function App() {
 
 
             <p
-              className={`text-black mb-8 text-sm md:text-base ${currentPostIndex === 0 ? 'text-gray-600 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
+              className={`text-base mb-10 ${currentPostIndex === 0 ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
               style={currentPostIndex === 0 ? {
                 fontFamily: 'Courier Prime, Courier, monospace',
                 fontWeight: 400,
-                color: '#4B5563', // Tailwind gray-600 (darker than gray-500)
+                color: '#6B7280',
                 lineHeight: 1.3,
               } : {
                 fontFamily: 'Courier Prime, monospace',
@@ -1528,17 +1528,15 @@ function App() {
             <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-40">
               <button
                 onClick={prevPost}
-                className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
+                className="w-12 h-12 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black active:border-transparent"
               >
-                <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>Previous</span>
+                <ChevronLeft size={20} className="text-black" />
               </button>
               <button
                 onClick={nextPost}
-                className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
+                className="w-12 h-12 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black active:border-transparent"
               >
-                <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>Next</span>
+                <ChevronRight size={20} className="text-black" />
               </button>
             </div>
           )}
@@ -1577,7 +1575,7 @@ function App() {
           {currentPost.subtitle}
         </h2>
         <p
-          className={`text-sm mb-10 ${currentPostIndex === 0 ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
+          className={`text-base mb-10 ${currentPostIndex === 0 ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
           style={currentPostIndex === 0 ? {
             fontFamily: 'Courier Prime, Courier, monospace',
             fontWeight: 400,
