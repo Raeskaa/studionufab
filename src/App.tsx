@@ -934,19 +934,19 @@ function App() {
         }}>
           <button
             onClick={prevPost}
-            className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors"
+            className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
           >
             <ChevronLeft size={16} className="text-black" />
           </button>
           <button
             onClick={nextPost}
-            className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors"
+            className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
           >
             <ChevronRight size={16} className="text-black" />
           </button>
           <button
             onClick={randomizeColor}
-            className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2"
+            className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
             title="Randomize background color"
           >
             <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>I'm bored</span>
@@ -961,14 +961,14 @@ function App() {
           <div className="fixed bottom-5 right-5 flex gap-4 z-40">
             <button
               onClick={handleScreenshot}
-              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Take a screenshot"
             >
               <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Screenshot</span>
             </button>
             <button
               onClick={randomizeColor}
-              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Randomize background color"
             >
               <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>I'm bored</span>
@@ -979,34 +979,41 @@ function App() {
           <div className="fixed top-5 right-5 z-40">
             <button
               onClick={() => setShowMoreOptions(!showMoreOptions)}
-              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="More options"
             >
               <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>More</span>
             </button>
             {showMoreOptions && (
-              <div className="absolute top-full right-0 mt-2 flex flex-col gap-2 bg-white border border-black p-2 shadow-lg">
+              <div
+                className={`
+                  absolute top-full right-0 mt-2 flex flex-col gap-2 bg-white border border-black p-2 shadow-lg
+                  transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                  ${showMoreOptions ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}
+                `}
+                style={{ transformOrigin: 'top right' }}
+              >
                 {/* Brush Size Controls */}
                 <div className="flex flex-col gap-1">
                   <span className="text-black text-sm" style={{ fontFamily: 'Courier Prime' }}>Brush Size:</span>
                   <div className="flex gap-1">
                     <button
                       onClick={() => setBrushWidth(2)}
-                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 2 ? 'bg-gray-200' : ''}`}
+                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 2 ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
                       style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
                     >
                       Thin
                     </button>
                     <button
                       onClick={() => setBrushWidth(5)}
-                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 5 ? 'bg-gray-200' : ''}`}
+                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 5 ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
                       style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
                     >
                       Medium
                     </button>
                     <button
                       onClick={() => setBrushWidth(10)}
-                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 10 ? 'bg-gray-200' : ''}`}
+                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 10 ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
                       style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
                     >
                       Thick
@@ -1022,14 +1029,14 @@ function App() {
                     id="brushColor"
                     value={brushColor}
                     onChange={(e) => setBrushColor(e.target.value)}
-                    className="h-8 w-full border border-black cursor-pointer"
+                    className="h-8 w-full border border-black cursor-pointer active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                   />
                 </div>
 
                 {/* Eraser Tool */}
                 <button
                   onClick={() => setIsErasing(!isErasing)}
-                  className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${isErasing ? 'bg-gray-200' : ''}`}
+                  className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${isErasing ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
                   style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
                 >
                   {isErasing ? 'Drawing Mode' : 'Eraser Tool'}
@@ -1038,7 +1045,7 @@ function App() {
                 {/* Clear Canvas Button */}
                 <button
                   onClick={handleClearCanvas}
-                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black"
+                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                   style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
                 >
                   Clear Canvas
@@ -1047,7 +1054,7 @@ function App() {
                 {/* Save Drawing Button */}
                 <button
                   onClick={handleSaveDrawing}
-                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black"
+                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                   style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
                 >
                   Save Drawing
@@ -1082,14 +1089,14 @@ function App() {
           <div className="absolute top-4 left-4 flex gap-2 z-20">
             <button
               onClick={handleScreenshot}
-              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Take a screenshot"
             >
               <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Screenshot</span>
             </button>
             <button
               onClick={handleDeleteBlogClick} // Call the new handler for confirmation
-              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Delete Blog Frame"
             >
               <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Delete</span>
@@ -1161,14 +1168,14 @@ function App() {
             <div className="flex justify-center gap-4">
               <button
                 onClick={confirmDeleteBlog}
-                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                 style={{ fontFamily: 'Courier Prime', }}
               >
                 Yes
               </button>
               <button
                 onClick={abortDeleteBlog}
-                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                 style={{ fontFamily: 'Courier Prime', }}
               >
                 Abort
@@ -1189,21 +1196,21 @@ function App() {
             <div className="flex justify-center gap-4">
               <button
                 onClick={downloadScreenshot}
-                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                 style={{ fontFamily: 'Courier Prime', }}
               >
                 Save
               </button>
               <button
                 onClick={emailScreenshot}
-                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                 style={{ fontFamily: 'Courier Prime', }}
               >
                 Share
               </button>
               <button
                 onClick={() => setShowScreenshotModal(false)}
-                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black"
+                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                 style={{ fontFamily: 'Courier Prime', }}
               >
                 Abort
@@ -1223,13 +1230,13 @@ function App() {
             <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-40">
               <button
                 onClick={prevPost}
-                className="w-10 h-10 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md"
+                className="w-10 h-10 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               >
                 <ChevronLeft size={20} className="text-black" />
               </button>
               <button
                 onClick={nextPost}
-                className="w-10 h-10 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md"
+                className="w-10 h-10 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               >
                 <ChevronRight size={20} className="text-black" />
               </button>
