@@ -33,6 +33,9 @@ const blogPosts = [
       "Not Looking",
       "We don't have a brand strategy. And we're not looking for one. We aren't a part of the cool kid competition. We want to exist, to create, to share ideas. To connect humans with humans. We want to be heard and to listen. Not to trends or markets, but to land, to memory, to you.",
       "We aren't founders building a brand. We are humans, and Nufab is a conversation.",
+      ".",
+      ".",
+      ".",
       "We're starting small. A studio with no ceilings. A balcony and a tailor. The story that started it all. And soon, our first public project."
     ]
   },
@@ -56,12 +59,11 @@ const blogPosts = [
   },
   */
   {
-    title: "Minimalism in modern design",
-    subtitle: "The power of intentional simplicity",
-    date: "08 July 2025",
+    title: "This blog doesn't exist",
+    subtitle: "*yet",
+    date: "",
     content: [
-      "Less is more – a principle that has guided designers for decades. Minimalism isn't just about removing elements; it's about distilling ideas to their purest form. Every line, every space, every color choice becomes intentional and meaningful.",
-      "The challenge of minimalist design lies not in what you include, but in what you choose to leave out. It requires a deep understanding of hierarchy, balance, and the subtle power of negative space to communicate effectively."
+      "Hi, Reader. Looking for more? We post when we have something worthwhile to say. Come back soon for something fresh!"
     ]
   }
 ];
@@ -656,7 +658,26 @@ function App() {
     // Add a small delay to ensure all elements are rendered and settled
     setTimeout(async () => {
       try {
-        const canvas = await (window as any).html2canvas(document.body);
+        const canvas = await (window as any).html2canvas(document.body, {
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: null,
+          width: window.innerWidth,
+          height: window.innerHeight,
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: window.innerWidth,
+          windowHeight: window.innerHeight,
+          foreignObjectRendering: true,
+          removeContainer: true,
+          scale: 1,
+          logging: false,
+          ignoreElements: (element: Element) => {
+            // Ignore any modals or overlays that shouldn't be in screenshot
+            return element.classList.contains('screenshot-modal') || 
+                   element.classList.contains('modal-overlay');
+          }
+        });
         const dataUrl = canvas.toDataURL('image/png');
         setScreenshotDataUrl(dataUrl);
         setShowScreenshotModal(true);
@@ -680,7 +701,7 @@ function App() {
           document.body.removeChild(modal);
         });
       }
-    }, 100); // 100ms delay
+    }, 200); // Increased delay to 200ms for better rendering
   };
 
 
@@ -829,9 +850,26 @@ function App() {
     setShowDeleteConfirmationModal(false); // Close confirmation modal
   };
 
+  // Optimized mouse event handlers to prevent lag
+  const handleFrameMouseEnter = useCallback(() => {
+    setIsGrabbing(true);
+  }, []);
+
+  const handleFrameMouseLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    stopDraggingFrame();
+    setIsGrabbing(false);
+  }, []);
+
+  const handleLogoMouseEnter = useCallback(() => {
+    setIsGrabbing(true);
+  }, []);
+
+  const handleLogoMouseLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    stopDraggingLogo();
+    setIsGrabbing(false);
+  }, []);
 
   const currentPost = blogPosts[currentPostIndex];
-
 
   // Helper to spawn a single eye at a random position
   const spawnRandomEye = useCallback(() => {
@@ -857,23 +895,26 @@ function App() {
   // Game mode: spawn eyes with different timing for mobile vs desktop
   useEffect(() => {
     if (gameMode) {
-      // Start interval if it doesn't exist
-      if (!gameEyesIntervalRef.current) {
-        // Check if mobile (screen width < 768px)
-        const isMobile = window.innerWidth < 768;
-        const spawnInterval = isMobile ? 10000 : 2000; // 10 seconds for mobile, 2 seconds for desktop
-        
-        // For mobile, start with a delay of 20 seconds for the first eye
-        if (isMobile) {
-          setTimeout(() => {
-            spawnRandomEye();
-            // Then continue every 10 seconds
-            gameEyesIntervalRef.current = window.setInterval(spawnRandomEye, spawnInterval);
-          }, 20000);
-        } else {
-          // For desktop, start immediately every 2 seconds
+      // Clear any existing interval first
+      if (gameEyesIntervalRef.current) {
+        clearInterval(gameEyesIntervalRef.current);
+        gameEyesIntervalRef.current = null;
+      }
+      
+      // Check if mobile (screen width < 768px)
+      const isMobile = window.innerWidth < 768;
+      const spawnInterval = isMobile ? 10000 : 2000; // 10 seconds for mobile, 2 seconds for desktop
+      
+      // For mobile, start with a delay of 20 seconds for the first eye
+      if (isMobile) {
+        setTimeout(() => {
+          spawnRandomEye();
+          // Then continue every 10 seconds
           gameEyesIntervalRef.current = window.setInterval(spawnRandomEye, spawnInterval);
-        }
+        }, 20000);
+      } else {
+        // For desktop, start immediately every 2 seconds
+        gameEyesIntervalRef.current = window.setInterval(spawnRandomEye, spawnInterval);
       }
     } else {
       if (gameEyesIntervalRef.current) {
@@ -953,13 +994,7 @@ function App() {
         setGunX(x => Math.max(40, x - 40));
       } else if (e.key === 'ArrowRight') {
         setGunX(x => Math.min(window.innerWidth - 40, x + 40));
-      } else if (e.key === 'Enter' || e.key === 'Shift') {
-        setIsShooting(true);
-        setBullets(bullets => [
-          ...bullets,
-          { x: gunX, y: window.innerHeight - 60, id: bulletIdRef.current++, type: 'normal' }
-        ]);
-      } else if (e.key === ' ') { // Spacebar for asterisk bullet
+      } else if (e.key === 'Enter' || e.key === ' ' || e.key === 'Shift') { // All shoot asterisk bullets
         setIsShooting(true);
         setBullets(bullets => [
           ...bullets,
@@ -1120,10 +1155,14 @@ function App() {
             cursor: 'none', // Always none, custom cursor will show
           }}
           onMouseDown={startDraggingLogo}
-          onMouseMove={dragLogo}
+          onMouseMove={(e) => {
+            dragLogo(e);
+            setPencilPosition({ x: e.clientX, y: e.clientY });
+          }}
           onMouseUp={stopDraggingLogo}
           onClick={handleLogoClick} // Added onClick handler
-          onMouseLeave={stopDraggingLogo}
+          onMouseEnter={handleLogoMouseEnter} // Show grab cursor when hovering
+          onMouseLeave={handleLogoMouseLeave} // Stop dragging and hide grab cursor when leaving
           onDragStart={e => e.preventDefault()} // Prevent browser drag
         >
           <img
@@ -1164,18 +1203,18 @@ function App() {
           <button
             onClick={randomizeColor}
             className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-            style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
+            style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             title="Randomize background color"
           >
-            <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>I'm bored</span>
+            <span className="text-black leading-none" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem', lineHeight: '1' }}>I'm bored</span>
           </button>
           <button
             onClick={handleEyesGameToggle}
             className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-            style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
+            style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             title="Start eyes game mode"
           >
-            <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>I'm still bored</span>
+            <span className="text-black leading-none" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem', lineHeight: '1' }}>I'm still bored</span>
           </button>
         </div>
       )}
@@ -1200,6 +1239,14 @@ function App() {
               style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
             >
               <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>I'm bored</span>
+            </button>
+            <button
+              onClick={handleEyesGameToggle}
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+              title="Start eyes game mode"
+              style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
+            >
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>I'm still bored</span>
             </button>
           </div>
 
@@ -1269,7 +1316,7 @@ function App() {
                   className={`h-8 bg-white hover:bg-gray-100 text-black py-1 px-2 rounded-none transition-colors border border-black ${isErasing ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
                   style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, fontSize: '0.875rem' }}
                 >
-                  {isErasing ? 'Drawing Mode' : 'Eraser Tool'}
+                  {isErasing ? 'Drawing Mode' : 'Erase'}
                 </button>
 
                 {/* Clear Canvas Button */}
@@ -1278,7 +1325,7 @@ function App() {
                   className="h-8 bg-white hover:bg-gray-100 text-black py-1 px-2 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                   style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, fontSize: '0.875rem' }}
                 >
-                  Clear Canvas
+                  Clear
                 </button>
 
                 {/* Save Drawing Button */}
@@ -1287,7 +1334,7 @@ function App() {
                   className="h-8 bg-white hover:bg-gray-100 text-black py-1 px-2 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                   style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, fontSize: '0.875rem' }}
                 >
-                  Save Drawing
+                  Save
                 </button>
 
               </div>
@@ -1311,9 +1358,27 @@ function App() {
             position: 'absolute', // Ensure this is explicitly set for positioning children
           }}
           onMouseDown={startDraggingFrame}
-          onMouseMove={dragFrame}
+          onMouseMove={(e) => {
+            dragFrame(e);
+            setPencilPosition({ x: e.clientX, y: e.clientY });
+            // Only show grab cursor if not hovering over a button
+            if (!(e.target as HTMLElement).closest('button')) {
+              setIsGrabbing(true);
+            } else {
+              setIsGrabbing(false);
+            }
+          }}
           onMouseUp={stopDraggingFrame}
-          onMouseLeave={stopDraggingFrame} // Stop dragging if mouse leaves the window
+          onMouseEnter={(e) => {
+            // Only show grab cursor if not hovering over a button
+            if (!(e.target as HTMLElement).closest('button')) {
+              setIsGrabbing(true);
+            }
+          }}
+          onMouseLeave={(e) => {
+            stopDraggingFrame();
+            setIsGrabbing(false);
+          }}
         >
           {/* Screenshot and Delete Buttons - Fixed position relative to blogFrameRef */}
           <div className="absolute top-4 left-4 flex gap-2 z-20">
@@ -1361,7 +1426,20 @@ function App() {
                   />
                 </span>
               ) : (
-                currentPost.title
+                <span style={{ display: 'inline-block' }}>
+                  {currentPost.title}
+                  <img
+                    src={Asterisk}
+                    alt="Asterisk"
+                    style={{
+                      display: 'inline',
+                      height: '0.35em',
+                      width: 'auto',
+                      verticalAlign: 'super',
+                      marginLeft: '0.1em',
+                    }}
+                  />
+                </span>
               )}
             </h1>
 
@@ -1394,7 +1472,7 @@ function App() {
 
 
             <p
-              className={`text-base mb-10 ${currentPostIndex === 0 ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
+              className={`text-base mb-10 ${currentPostIndex === 0 ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
               style={currentPostIndex === 0 ? {
                 fontFamily: 'Courier Prime, Courier, monospace',
                 fontWeight: 400,
@@ -1440,10 +1518,11 @@ function App() {
                 return (
                   <p
                     key={index}
-                    className="text-black leading-relaxed text-sm md:text-lg lg:text-xl"
+                    className={`leading-relaxed ${currentPostIndex === 1 ? 'text-xs md:text-sm lg:text-base' : 'text-sm md:text-lg lg:text-xl'}`}
                     style={{
-                      fontFamily: 'Sofia Sans',
+                      fontFamily: currentPostIndex === 1 ? 'Courier Prime, Courier, monospace' : 'Sofia Sans',
                       fontWeight: 400,
+                      color: currentPostIndex === 1 ? '#6B7280' : '#000000', // Same gray as first blog
                     }}
                   >
                     {paragraph}
@@ -1489,7 +1568,7 @@ function App() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
             <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>
-              Caught you creating
+              All Yours.
             </h3>
             <div className="flex justify-center gap-4">
               <button
@@ -1511,7 +1590,7 @@ function App() {
                 className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
                 style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
               >
-                Abort
+                Close
               </button>
             </div>
           </div>
@@ -1528,15 +1607,17 @@ function App() {
             <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-40">
               <button
                 onClick={prevPost}
-                className="w-12 h-12 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black active:border-transparent"
+                className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
               >
-                <ChevronLeft size={20} className="text-black" />
+                <ChevronLeft size={16} className="text-black" />
               </button>
               <button
                 onClick={nextPost}
-                className="w-12 h-12 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors rounded-full shadow-md active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black active:border-transparent"
+                className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
               >
-                <ChevronRight size={20} className="text-black" />
+                <ChevronRight size={16} className="text-black" />
               </button>
             </div>
           )}
@@ -1633,7 +1714,7 @@ function App() {
       {gameMode && (
         <>
           {/* Eyes (do not clear on activity) */}
-          {killCount < 20 && eyes.map((eye) => (
+          {eyes.map((eye) => (
             <div
               key={eye.id}
               className="absolute z-40"
@@ -1729,7 +1810,7 @@ function App() {
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
                 <h3 className="text-lg font-bold text-black mb-0" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>
-                  nazaar lag gayi
+                  Nazar lag gayi
                 </h3>
               </div>
             </div>
