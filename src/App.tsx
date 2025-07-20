@@ -34,8 +34,6 @@ const blogPosts = [
       "We don't have a brand strategy. And we're not looking for one. We aren't a part of the cool kid competition. We want to exist, to create, to share ideas. To connect humans with humans. We want to be heard and to listen. Not to trends or markets, but to land, to memory, to you.",
       "We aren't founders building a brand. We are humans, and Nufab is a conversation.",
       ".",
-      ".",
-      ".",
       "We're starting small. A studio with no ceilings. A balcony and a tailor. The story that started it all. And soon, our first public project."
     ]
   },
@@ -413,7 +411,7 @@ function App() {
         // Trigger download
         const link = document.createElement('a');
         link.href = dataUrl;
-        link.download = 'my_drawing_with_background.png';
+        link.download = 'masterpiece.png';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -1015,6 +1013,7 @@ function App() {
       setEyes([]);
       setBullets([]);
       setGunX(window.innerWidth / 2);
+      setShowMoreOptions(false); // Close the More dialog when entering game mode
     }
   };
   // When 'I hate eyes' is clicked, reload the page
@@ -1100,11 +1099,11 @@ function App() {
                 left: pencilPosition.x,
                 pointerEvents: 'none',
                 transform: `translate(-50%, -50%) scale(${cursorScale})`,
-                width: '32px',
-                height: '32px',
+                width: '40px', // Increased from 32px to match grab cursor better
+                height: '40px', // Increased from 32px to match grab cursor better
               }}
               onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✏️";
+                e.currentTarget.src = "https://placehold.co/40x40/000000/FFFFFF?text=✏️";
                 console.error("Failed to load Pencil SVG icon from URL");
               }}
             />
@@ -1269,6 +1268,15 @@ function App() {
                 `}
                 style={{ transformOrigin: 'top right' }}
               >
+                {/* Close button */}
+                <button
+                  onClick={() => setShowMoreOptions(false)}
+                  className="absolute top-1 right-1 w-6 h-6 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+                  style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
+                  title="Close"
+                >
+                  <span className="text-black text-sm">×</span>
+                </button>
                 {/* Brush Size Controls */}
                 <div className="flex flex-col gap-1">
                   <span className="text-black text-sm" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>Brush Size:</span>
@@ -1514,6 +1522,36 @@ function App() {
                     </h4>
                   );
                 }
+                
+                // Special handling for three dots in first blog post
+                if (currentPostIndex === 0 && paragraph === "." && 
+                    index + 2 < currentPost.content.length && 
+                    currentPost.content[index + 1] === "." && 
+                    currentPost.content[index + 2] === ".") {
+                  return (
+                    <p
+                      key={index}
+                      className="leading-tight text-sm md:text-lg lg:text-xl"
+                      style={{
+                        fontFamily: 'Sofia Sans',
+                        fontWeight: 400,
+                        color: '#000000',
+                        marginBottom: '0.5rem', // Reduced spacing
+                        letterSpacing: '0.2em', // Tighter spacing between dots
+                      }}
+                    >
+                      . . .
+                    </p>
+                  );
+                }
+                
+                // Skip the second and third dots since they're handled above
+                if (currentPostIndex === 0 && paragraph === "." && 
+                    index > 0 && 
+                    currentPost.content[index - 1] === ".") {
+                  return null;
+                }
+                
                 // Default paragraph rendering
                 return (
                   <p
@@ -1641,7 +1679,20 @@ function App() {
               />
             </span>
           ) : (
-            currentPost.title
+            <span style={{ display: 'inline-block' }}>
+              {currentPost.title}
+              <img
+                src={Asterisk}
+                alt="Asterisk"
+                style={{
+                  display: 'inline',
+                  height: '0.35em',
+                  width: 'auto',
+                  verticalAlign: 'super',
+                  marginLeft: '0.1em',
+                }}
+              />
+            </span>
           )}
         </h1>
         <h2
@@ -1802,7 +1853,7 @@ function App() {
               className="fixed bottom-5 right-5 z-50 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-6 py-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
             >
-              i hate eyes
+              Back to blog
             </button>
           )}
           {/* 'nazar lag gayi' modal if gameOver */}
