@@ -8,7 +8,6 @@ const colors = [
   '#FE6416', // Orange
   '#FE9FF5', // Pink
   '#FF0D01', // Red
-  '#5541BA', // Purple
   '#ffffff', // White
   '#E1F532', // Light Green
 ];
@@ -18,23 +17,23 @@ const blogPosts = [
   {
     title: "NUFAB IS A DESIGN STUDIO*",
     subtitle: "*or maybe something else entirely.",
-    date: "Hi, reader. Welcome to a media anomaly: long form content. This one’s a 3 minute read. Oh, and if the words don’t hold you, don’t be afraid to wander.",
+    date: "Hi, reader. Welcome to a media anomaly: long form content. This one's a 3 minute read. Oh, and if the words don't hold you, don't be afraid to wander.",
     content: [
-      "Some shared opinions about culture, some inter-generational dialogue, some free love – and Nufab was conceived as a fragile idea, unexpectedly. But that was a long time ago. It has wandered, been wrong, changed and grown. What remains the same is what truly defines us. And we’re ready to share it with you.",
+      "Some shared opinions about culture, some inter-generational dialogue, some free love – and Nufab was conceived as a fragile idea, unexpectedly. But that was a long time ago. It has wandered, been wrong, changed and grown. What remains the same is what truly defines us. And we're ready to share it with you.",
       "Nufab is awake. Nufab is looking.",
       "Looking Inward",
-      "Long have we looked outward for the latest definition of style and culture to follow. We’re losing our identity as a People, and losing our chance to shape it into our own definitions. Why are we following this penthouse blueprint on top of the foundation of our intricate Haveli? A land full of stories awaits, eager to share its artisanal legacy, its natural abundance, and its willing hands.",
-      "Nufab looks inward into this vivid and chaotic land. Nufab seeks to craft with more tenderness, more relevance, more roots. We’re not India-inspired. We’re just Indian.",
+      "Long have we looked outward for the latest definition of style and culture to follow. We're losing our identity as a People, and losing our chance to shape it into our own definitions. Why are we following this penthouse blueprint on top of the foundation of our intricate Haveli? A land full of stories awaits, eager to share its artisanal legacy, its natural abundance, and its willing hands.",
+      "Nufab looks inward into this vivid and chaotic land. Nufab seeks to craft with more tenderness, more relevance, more roots. We're not India-inspired. We're just Indian.",
       "Looking Ahead",
-      "Even the clearest water turns foul when it stops flowing. Tradition and culture are no different. Preserving them in a glass case leaves them stagnant, outdated and irrelevant. The only way to do justice to our art is to let it evolve with the land, and its people. Culture isn’t a fragile museum piece, it has always been meant for play.",
+      "Even the clearest water turns foul when it stops flowing. Tradition and culture are no different. Preserving them in a glass case leaves them stagnant, outdated and irrelevant. The only way to do justice to our art is to let it evolve with the land, and its people. Culture isn't a fragile museum piece, it has always been meant for play.",
       "Nufab takes culture out of nostalgic memory and brings it into the everyday — so it can shed what no longer serves and fall freely into the hands of its new heirs.",
       "Looking Around",
       "To be human is to create, to play, to express, and to share. Art is for everyone, everyday. Culture has always lived among people: in one rupee matchboxes and newsprint ads, in cinema posters and Monday Haats, in 3rd A.C. and IPL nights. But somewhere in its revival, culture became elitist. Wrapped in the shenanigans of marketing and coolness, culture has been taken away from its true place — in the hands that shaped it.",
-      "Nufab isn’t a revival, it’s a continuation. It is a movement to bring people back to their own art, their own language, their own culture.",
+      "Nufab isn't a revival, it's a continuation. It is a movement to bring people back to their own art, their own language, their own culture.",
       "Not Looking",
-      "We don’t have a brand strategy. And we’re not looking for one. We aren’t a part of the cool kid competition. We want to exist, to create, to share ideas. To connect humans with humans. We want to be heard and to listen. Not to trends or markets, but to land, to memory, to you.",
-      "We aren’t founders building a brand. We are humans, and Nufab is a conversation.",
-      "We’re starting small. A studio with no ceilings. A balcony and a tailor. The story that started it all. And soon, our first public project."
+      "We don't have a brand strategy. And we're not looking for one. We aren't a part of the cool kid competition. We want to exist, to create, to share ideas. To connect humans with humans. We want to be heard and to listen. Not to trends or markets, but to land, to memory, to you.",
+      "We aren't founders building a brand. We are humans, and Nufab is a conversation.",
+      "We're starting small. A studio with no ceilings. A balcony and a tailor. The story that started it all. And soon, our first public project."
     ]
   },
   /*
@@ -44,12 +43,12 @@ const blogPosts = [
     subtitle: "It has the potential to innovate profoundly at \"Mind\" and \"Culture\" levels.",
     date: "24 July 2025",
     content: [
-      "The first question asked in all design colleges is “what is the difference between art and design?” and following it is the holy revelation of the separation — functionality. This piece of information slips almost boastingly off the design educator’s tongue - Design is functional, Art is merely expressive. Design is selfless, Art is selfish. Design facilitates, Art just is.",
-      "We are passionate antibelievers of the existence of this border. Don’t get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organised paths in creative fields. But this sort of organisation is simply like well-trodded paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design.",
+      "The first question asked in all design colleges is "what is the difference between art and design?" and following it is the holy revelation of the separation — functionality. This piece of information slips almost boastingly off the design educator's tongue - Design is functional, Art is merely expressive. Design is selfless, Art is selfish. Design facilitates, Art just is.",
+      "We are passionate antibelievers of the existence of this border. Don't get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organised paths in creative fields. But this sort of organisation is simply like well-trodded paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design.",
       "I like to think of logos as bite sized pieces of art, like an elaborate thought vacuum-packed into a few pixels. Making a logo feels like a party trick, like making a thought-dove transform into a small white rose and conjuring it back at a swish. Looking at a logo and unpacking its meaning feels like decrypting a message, written in a language with more forgiving boundaries that letters or syllables.",
       "Although a logo is as large as the decrypter, I would like to talk about the Nufab logo in its context. It is a small wax seal to a movement that we hope can envelope anyone and everyone.",
-      "The central form of the logo is a human figure. Inside the context of the circle and square, it is reference to the Vitruvian Man by Da Vinci. It shows humanity, evolution and art. Da Vinci, the designer, artist, scientist and philosopher, inspires Nufab with his urge to be a jack of all trades - a maker that didn’t stick to trodded paths and took to the grass.",
-      "The form is carved out of an asterisk. An asterisk implies a footnote, subtext, or contingency — in this case, that “we preserve” but with evolution, and without the stagnant, stale and outdated.",
+      "The central form of the logo is a human figure. Inside the context of the circle and square, it is reference to the Vitruvian Man by Da Vinci. It shows humanity, evolution and art. Da Vinci, the designer, artist, scientist and philosopher, inspires Nufab with his urge to be a jack of all trades - a maker that didn't stick to trodded paths and took to the grass.",
+      "The form is carved out of an asterisk. An asterisk implies a footnote, subtext, or contingency — in this case, that "we preserve" but with evolution, and without the stagnant, stale and outdated.",
       "Also quite striking is the eye, with a falling gaze that is almost meditative. It speaks of intentional, unblinking perception that is matter of fact and just. Nufab starts with observation, which gives way to conversation, and then creative action.",
       "In its stylistic entirety, The logo speaks of reform in the system to include human tenderness in contrast with efficiency goals. It speaks of community and reaching out. It speaks of strong, intentional, creative action.",
       "The logotype weaves different accents into the english name. The Dot beneath the F not only represents the Nuqta used in writing the word in devanagari, but also is our Nazar ka Teeka onto our beloved."
@@ -162,6 +161,32 @@ function App() {
   const [historyPointer, setHistoryPointer] = useState(-1); // Points to the current state in history
   const MAX_HISTORY_STATES = 10; // Max number of states to keep in history
 
+  // Add state for eyes mode and interval
+  const [eyesMode, setEyesMode] = useState<'like' | 'hate'>('hate');
+  const persistentEyesIntervalRef = useRef<number | null>(null);
+
+  // Add gameMode state
+  const [gameMode, setGameMode] = useState(false);
+  const [gunX, setGunX] = useState(window.innerWidth / 2);
+  const [bullets, setBullets] = useState<{ x: number; y: number; id: number; dir?: boolean; type?: string }[]>([]);
+  const bulletIdRef = useRef(0);
+  const gameEyesIntervalRef = useRef<number | null>(null);
+
+  // Add state to track initial eyes
+  const [initialEyesLeft, setInitialEyesLeft] = useState(10);
+
+  // Add gameOver state
+  const [gameOver, setGameOver] = useState(false);
+
+  // Add killCount state
+  const [killCount, setKillCount] = useState(0);
+
+  // Calculate eye spawn speed based on kill count (faster every 10 kills)
+  const getEyeSpawnSpeed = useCallback(() => {
+    const speedLevel = Math.floor(killCount / 10);
+    return Math.max(500, 2000 - speedLevel * 300); // Start at 2000ms, decrease by 300ms every 10 kills, minimum 500ms
+  }, [killCount]);
+
 
   // Function to randomize the background color, ensuring it's not the same as the current one
   const randomizeColor = () => {
@@ -184,8 +209,35 @@ function App() {
   }, []);
 
 
-  // Function to reset all inactivity timers
+  // Persistent eyes effect
+  useEffect(() => {
+    if (eyesMode === 'like') {
+      // Add an eye immediately
+      addEye();
+      // Start persistent interval
+      persistentEyesIntervalRef.current = window.setInterval(addEye, 15000);
+    } else {
+      // Stop persistent interval
+      if (persistentEyesIntervalRef.current) {
+        clearInterval(persistentEyesIntervalRef.current);
+        persistentEyesIntervalRef.current = null;
+      }
+      // Clear all eyes when switching back to 'hate'
+      setEyes([]);
+    }
+    // Cleanup on unmount
+    return () => {
+      if (persistentEyesIntervalRef.current) {
+        clearInterval(persistentEyesIntervalRef.current);
+        persistentEyesIntervalRef.current = null;
+      }
+    };
+  }, [eyesMode, addEye]);
+
+
+  // Inactivity timer logic: only run if eyesMode is 'hate'
   const resetInactivityTimer = useCallback(() => {
+    if (eyesMode !== 'hate') return; // Only run inactivity logic in 'hate' mode
     if (inactivityTimeoutRef.current) {
       clearTimeout(inactivityTimeoutRef.current);
     }
@@ -193,13 +245,11 @@ function App() {
       clearInterval(eyeIntervalRef.current);
       setEyes([]); // Clear existing eyes when activity resumes
     }
-
-
     inactivityTimeoutRef.current = window.setTimeout(() => {
-      addEye(); // Add first eye after 5 seconds
+      addEye(); // Add first eye after 40 seconds
       eyeIntervalRef.current = window.setInterval(addEye, 15000); // Add subsequent eyes every 15 seconds
     }, 40000); // 40 seconds for first eye
-  }, [addEye]);
+  }, [addEye, eyesMode]);
 
 
   // --- Drawing Functions ---
@@ -783,6 +833,148 @@ function App() {
   const currentPost = blogPosts[currentPostIndex];
 
 
+  // Helper to spawn a single eye at a random position
+  const spawnRandomEye = useCallback(() => {
+    const padding = 50;
+    const x = Math.random() * (window.innerWidth - padding * 2) + padding;
+    const y = Math.random() * (window.innerHeight - 200 - padding * 2) + padding; // avoid bottom for gun
+    const rotation = Math.random() * 360;
+    setEyes(prevEyes => [...prevEyes, { id: eyeIdCounter.current++, x, y, rotation }]);
+  }, []);
+
+  // Game mode: spawn 10 eyes instantly on activation
+  useEffect(() => {
+    if (gameMode) {
+      setEyes([]);
+      setBullets([]);
+      setInitialEyesLeft(10);
+      setTimeout(() => {
+        for (let i = 0; i < 10; i++) spawnRandomEye();
+      }, 0);
+    }
+  }, [gameMode, spawnRandomEye]);
+
+  // Game mode: spawn eyes every 2 seconds continuously
+  useEffect(() => {
+    if (gameMode) {
+      // Start interval if it doesn't exist
+      if (!gameEyesIntervalRef.current) {
+        gameEyesIntervalRef.current = window.setInterval(spawnRandomEye, 2000);
+      }
+    } else {
+      if (gameEyesIntervalRef.current) {
+        clearInterval(gameEyesIntervalRef.current);
+        gameEyesIntervalRef.current = null;
+      }
+    }
+    return () => {
+      if (gameEyesIntervalRef.current) {
+        clearInterval(gameEyesIntervalRef.current);
+        gameEyesIntervalRef.current = null;
+      }
+    };
+  }, [gameMode, spawnRandomEye]);
+
+  // Bullet movement and collision (with bounce and player death, and killCount)
+  useEffect(() => {
+    if (!gameMode || gameOver) return;
+    if (bullets.length === 0) return;
+    const interval = setInterval(() => {
+      setBullets(bullets => bullets.map(b => {
+        if (b.dir === undefined) b.dir = true;
+        if (b.dir) {
+          if (b.y - 20 <= 0) {
+            return { ...b, y: 0, dir: false };
+          }
+          return { ...b, y: b.y - 20 };
+        } else {
+          return { ...b, y: b.y + 20 };
+        }
+      }).filter(b => b.y < window.innerHeight));
+      setEyes(eyes => {
+        let killed = 0;
+        const filtered = eyes.filter(eye => {
+          const hit = bullets.some(b => {
+            const dx = b.x - eye.x;
+            const dy = b.y - eye.y;
+            return b.dir && Math.sqrt(dx * dx + dy * dy) < 50;
+          });
+          if (hit) killed++; // Count all kills regardless of initialEyesLeft
+          return !hit;
+        });
+        if (killed > 0 && initialEyesLeft > 0) setInitialEyesLeft(n => Math.max(0, n - killed));
+        // Count kills for win condition - no limit
+        if (killed > 0) setKillCount(c => c + killed);
+        return filtered;
+      });
+      setBullets(bullets => {
+        if (gameOver) return bullets;
+        const hit = bullets.some(b => {
+          if (b.dir === false && b.y >= window.innerHeight - 60) {
+            return Math.abs(b.x - gunX) < 30;
+          }
+          return false;
+        });
+        if (hit) setGameOver(true);
+        return bullets;
+      });
+    }, 30);
+    return () => clearInterval(interval);
+  }, [gameMode, bullets, initialEyesLeft, gunX, gameOver, killCount]);
+
+  // Gun SVG with color and muzzle flash when shooting
+  const [isShooting, setIsShooting] = useState(false);
+  useEffect(() => {
+    if (!gameMode) return;
+    if (!isShooting) return;
+    const timeout = setTimeout(() => setIsShooting(false), 100);
+    return () => clearTimeout(timeout);
+  }, [isShooting, gameMode]);
+
+  // Gun movement and shooting (add muzzle flash)
+  useEffect(() => {
+    if (!gameMode) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        setGunX(x => Math.max(40, x - 40));
+      } else if (e.key === 'ArrowRight') {
+        setGunX(x => Math.min(window.innerWidth - 40, x + 40));
+      } else if (e.key === 'Enter' || e.key === 'Shift') {
+        setIsShooting(true);
+        setBullets(bullets => [
+          ...bullets,
+          { x: gunX, y: window.innerHeight - 60, id: bulletIdRef.current++, type: 'normal' }
+        ]);
+      } else if (e.key === ' ') { // Spacebar for asterisk bullet
+        setIsShooting(true);
+        setBullets(bullets => [
+          ...bullets,
+          { x: gunX, y: window.innerHeight - 60, id: bulletIdRef.current++, type: 'asterisk' }
+        ]);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [gameMode, gunX]);
+
+  // When 'I like eyes' is clicked, activate game mode
+  const handleEyesGameToggle = () => {
+    console.log('I like eyes button clicked');
+    if (!gameMode) {
+      setGameMode(true);
+      console.log('setGameMode(true) called, gameMode is now:', true);
+      setEyes([]);
+      setBullets([]);
+      setGunX(window.innerWidth / 2);
+    }
+  };
+  // When 'I hate eyes' is clicked, reload the page
+  const handleExitGame = () => {
+    window.location.reload();
+  };
+
+
+  console.log('Rendering, gameMode:', gameMode);
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ backgroundColor }}>
       {/* Custom CSS for scrollbar */}
@@ -826,50 +1018,54 @@ function App() {
 
 
       {/* Custom Cursor Rendering */}
-      {isGrabbing && (
-        <img
-          src="https://raw.githubusercontent.com/Raeskaa/studionufab/b14b17e2dce2b5fff264d91d41c2e787bec30673/Grab%20Cursor.svg" // Grab cursor SVG
-          alt="Grab Cursor"
-          className="absolute z-50" // High z-index to be on top
-          style={{
-            top: pencilPosition.y, // Use pencilPosition for consistency
-            left: pencilPosition.x, // Use pencilPosition for consistency
-            pointerEvents: 'none', // Critical: allows clicks/drawing to pass through
-            transform: 'translate(-50%, -50%)', // Center the cursor
-            width: '32px', // Fixed size for grab cursor
-            height: '32px', // Fixed size for grab cursor
-          }}
-          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-            e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✋"; // Fallback image
-            console.error("Failed to load Grab SVG icon from URL");
-          }}
-        />
+      {!gameMode && (
+        <>
+          {isGrabbing && (
+            <img
+              src="https://raw.githubusercontent.com/Raeskaa/studionufab/b14b17e2dce2b5fff264d91d41c2e787bec30673/Grab%20Cursor.svg" // Grab cursor SVG
+              alt="Grab Cursor"
+              className="absolute z-50" // High z-index to be on top
+              style={{
+                top: pencilPosition.y, // Use pencilPosition for consistency
+                left: pencilPosition.x, // Use pencilPosition for consistency
+                pointerEvents: 'none', // Critical: allows clicks/drawing to pass through
+                transform: 'translate(-50%, -50%)', // Center the cursor
+                width: '32px', // Fixed size for grab cursor
+                height: '32px', // Fixed size for grab cursor
+              }}
+              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✋"; // Fallback image
+                console.error("Failed to load Grab SVG icon from URL");
+              }}
+            />
+          )}
+
+
+          {!isGrabbing && showPencil && ( // Only show pencil if not grabbing
+            <img
+              src="https://raw.githubusercontent.com/Raeskaa/studionufab/59d263299b8c3990bd561abbd995c9f13409b6ac/Cursor%20for%20Blog.svg"
+              alt="Pencil Cursor"
+              className="absolute z-50"
+              style={{
+                top: pencilPosition.y,
+                left: pencilPosition.x,
+                pointerEvents: 'none',
+                transform: `translate(-50%, -50%) scale(${cursorScale})`,
+                width: '32px',
+                height: '32px',
+              }}
+              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✏️";
+                console.error("Failed to load Pencil SVG icon from URL");
+              }}
+            />
+          )}
+        </>
       )}
 
 
-      {!isGrabbing && showPencil && ( // Only show pencil if not grabbing
-        <img
-          src="https://raw.githubusercontent.com/Raeskaa/studionufab/59d263299b8c3990bd561abbd995c9f13409b6ac/Cursor%20for%20Blog.svg"
-          alt="Pencil Cursor"
-          className="absolute z-50"
-          style={{
-            top: pencilPosition.y,
-            left: pencilPosition.x,
-            pointerEvents: 'none',
-            transform: `translate(-50%, -50%) scale(${cursorScale})`,
-            width: '32px',
-            height: '32px',
-          }}
-          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-            e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✏️";
-            console.error("Failed to load Pencil SVG icon from URL");
-          }}
-        />
-      )}
-
-
-      {/* Dynamic Eye SVGs */}
-      {eyes.map((eye) => (
+      {/* Eyes (normal mode) */}
+      {!gameMode && eyes.map((eye) => (
         <div
           key={eye.id}
           className="absolute z-40" // Increased z-index for eyes to be above mobile blog frame
@@ -897,40 +1093,42 @@ function App() {
 
 
       {/* Fixed Black Circle (Logo) - Now Draggable and Clickable */}
-      <div
-        ref={logoCircleRef}
-        className="absolute rounded-full z-45 flex items-center justify-center" // Changed z-index to 45
-        style={{
-          top: logoPosition.y,
-          left: logoPosition.x,
-          width: '180px',
-          height: '180px',
-          backgroundColor: '#ffffff',
-          cursor: 'none', // Always none, custom cursor will show
-        }}
-        onMouseDown={startDraggingLogo}
-        onMouseMove={dragLogo}
-        onMouseUp={stopDraggingLogo}
-        onClick={handleLogoClick} // Added onClick handler
-        onMouseLeave={stopDraggingLogo}
-        onDragStart={e => e.preventDefault()} // Prevent browser drag
-      >
-        <img
-          src="https://raw.githubusercontent.com/Raeskaa/studionufab/ffdd3e0158bd7e83bfb51a14f710792b29061d90/Group.svg" // Corrected image source URL
-          alt="Decorative Icon" // Always provide an alt text for accessibility
-          className="w-2/3 h-2/3" // Adjust size as needed
-          // Optional: Add an onerror handler for fallback if image fails to load
-          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-            e.currentTarget.src = "https://placehold.co/100x100/000000/FFFFFF?text=Error"; // Fallback image
-            console.error("Failed to load SVG icon from URL");
+      {!gameMode && (
+        <div
+          ref={logoCircleRef}
+          className="absolute rounded-full z-45 flex items-center justify-center" // Changed z-index to 45
+          style={{
+            top: logoPosition.y,
+            left: logoPosition.x,
+            width: '180px',
+            height: '180px',
+            backgroundColor: '#ffffff',
+            cursor: 'none', // Always none, custom cursor will show
           }}
-          draggable={false}
-        />
-      </div>
+          onMouseDown={startDraggingLogo}
+          onMouseMove={dragLogo}
+          onMouseUp={stopDraggingLogo}
+          onClick={handleLogoClick} // Added onClick handler
+          onMouseLeave={stopDraggingLogo}
+          onDragStart={e => e.preventDefault()} // Prevent browser drag
+        >
+          <img
+            src="https://raw.githubusercontent.com/Raeskaa/studionufab/ffdd3e0158bd7e83bfb51a14f710792b29061d90/Group.svg" // Corrected image source URL
+            alt="Decorative Icon" // Always provide an alt text for accessibility
+            className="w-2/3 h-2/3" // Adjust size as needed
+            // Optional: Add an onerror handler for fallback if image fails to load
+            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+              e.currentTarget.src = "https://placehold.co/100x100/000000/FFFFFF?text=Error"; // Fallback image
+              console.error("Failed to load SVG icon from URL");
+            }}
+            draggable={false}
+          />
+        </div>
+      )}
 
 
       {/* Navigation Arrows & Color Switcher (I'm bored) - Fixed position relative to viewport */}
-      {showNavButtons && (
+      {showNavButtons && !gameMode && (
         <div className="absolute flex gap-2 z-20" style={{
           bottom: 'calc(70vh + 14px)', // Fixed position relative to viewport
           right: '2vw', // Fixed position relative to viewport
@@ -952,10 +1150,18 @@ function App() {
           <button
             onClick={randomizeColor}
             className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-            title="Randomize background color"
             style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
+            title="Randomize background color"
           >
             <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>I'm bored</span>
+          </button>
+          <button
+            onClick={handleEyesGameToggle}
+            className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+            style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
+            title="Start eyes game mode"
+          >
+            <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>I'm still bored</span>
           </button>
         </div>
       )}
@@ -1078,7 +1284,7 @@ function App() {
 
 
       {/* Blog Content Frame - Conditionally Rendered */}
-      {showBlogContentFrame && (
+      {!gameMode && showBlogContentFrame && (
         <div
           ref={blogFrameRef}
           className="absolute bg-white border-2 border-black z-30 p-8" // Removed overflow-y-auto here
@@ -1408,6 +1614,114 @@ function App() {
           })}
         </div>
       </div>
+
+      {/* Game mode overlay */}
+      {gameMode && (
+        <>
+          {/* Eyes (do not clear on activity) */}
+          {killCount < 20 && eyes.map((eye) => (
+            <div
+              key={eye.id}
+              className="absolute z-40"
+              style={{
+                top: eye.y,
+                left: eye.x,
+                pointerEvents: 'none',
+              }}
+            >
+              <img
+                src="https://raw.githubusercontent.com/Raeskaa/studionufab/ec81588c796d013bbd3fcb4d473985d8e0f87a8b/Nufab%20Eye%20White.svg"
+                alt="Eye Icon"
+                style={{ width: '80.6px', height: '80.6px' }}
+              />
+            </div>
+          ))}
+          {/* Bullets */}
+          {bullets.map(bullet => (
+            <div
+              key={bullet.id}
+              className="absolute z-50"
+              style={{
+                left: bullet.x,
+                top: bullet.y,
+                transform: 'translate(-50%, -50%)',
+                pointerEvents: 'none',
+              }}
+            >
+              {bullet.type === 'asterisk' ? (
+                <img
+                  src="asterisk.svg"
+                  alt="Asterisk Bullet"
+                  style={{ width: '20px', height: '20px' }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: '8px',
+                    height: '24px',
+                    background: 'black',
+                    borderRadius: '4px',
+                  }}
+                />
+              )}
+            </div>
+          ))}
+          {/* Gun */}
+          <div
+            className="fixed z-50"
+            style={{
+              left: gunX,
+              bottom: 0,
+              width: '60px',
+              height: '60px',
+              transform: 'translate(-50%, 0)',
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+              pointerEvents: 'none',
+            }}
+          >
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Gun base */}
+              <rect x="20" y="30" width="20" height="20" rx="6" fill="#222" stroke="#888" strokeWidth="2" />
+              {/* Gun barrel */}
+              <rect x="27" y="10" width="6" height="20" rx="3" fill="#444" stroke="#888" strokeWidth="2" />
+              {/* Gun handle */}
+              <rect x="25" y="45" width="10" height="10" rx="3" fill="#666" stroke="#888" strokeWidth="2" />
+              {/* Muzzle flash */}
+              {isShooting && (
+                <polygon points="30,10 33,0 36,10" fill="#FFD700" />
+              )}
+            </svg>
+          </div>
+          {/* Scoreboard always in top right */}
+          {!gameOver && (
+            <div className="fixed top-5 right-5 z-50 bg-white border border-black px-4 py-2 text-black text-lg" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>
+              {killCount < 20 ? `${killCount}/20` : `${killCount}/20`}
+            </div>
+          )}
+          {/* 'I hate eyes' button after win */}
+          {killCount >= 20 && !gameOver && (
+            <button
+              onClick={handleExitGame}
+              className="fixed bottom-5 right-5 z-50 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-6 py-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+              style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
+            >
+              i hate eyes
+            </button>
+          )}
+          {/* 'nazar lag gayi' modal if gameOver */}
+          {gameOver && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
+                <h3 className="text-lg font-bold text-black mb-0" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>
+                  nazaar lag gayi
+                </h3>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
