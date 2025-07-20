@@ -964,7 +964,7 @@ function App() {
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Take a screenshot"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Screenshot</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>screenhot</span>
             </button>
             <button
               onClick={randomizeColor}
@@ -1092,14 +1092,14 @@ function App() {
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Take a screenshot"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Screenshot</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>screenhot</span>
             </button>
             <button
               onClick={handleDeleteBlogClick} // Call the new handler for confirmation
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Delete Blog Frame"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Delete</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>dlt</span>
             </button>
           </div>
 
@@ -1118,21 +1118,42 @@ function App() {
 
 
             <h2
-              className="text-black mb-8 leading-tight text-sm md:text-lg lg:text-xl"
-              style={{
-                fontFamily: 'Sofia Sans',
-                fontWeight: '400'
-              }}
+              className={`text-black mb-8 leading-tight text-sm md:text-lg lg:text-xl ${currentPostIndex === 0 ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
+              style={
+                currentPostIndex === 0 && currentPost.subtitle === '*or maybe something else entirely.'
+                  ? {
+                      fontFamily: 'Sofia Sans',
+                      fontWeight: 400,
+                      color: '#000',
+                      lineHeight: 1.3,
+                    }
+                  : currentPostIndex === 0
+                  ? {
+                      fontFamily: 'Courier Prime, Courier, monospace',
+                      fontWeight: 400,
+                      color: '#6B7280', // Tailwind gray-500
+                      lineHeight: 1.3,
+                    }
+                  : {
+                      fontFamily: 'Sofia Sans',
+                      fontWeight: 400,
+                    }
+              }
             >
               {currentPost.subtitle}
-            </h2 >
+            </h2>
 
 
             <p
-              className="text-black mb-8 text-xs md:text-sm"
-              style={{
+              className={`text-black mb-8 text-xs md:text-sm ${currentPostIndex === 0 ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
+              style={currentPostIndex === 0 ? {
+                fontFamily: 'Courier Prime, Courier, monospace',
+                fontWeight: 400,
+                color: '#6B7280', // Tailwind gray-500
+                lineHeight: 1.3,
+              } : {
                 fontFamily: 'Courier Prime, monospace',
-                fontWeight: '400'
+                fontWeight: 400,
               }}
             >
               {currentPost.date}
@@ -1140,18 +1161,46 @@ function App() {
 
 
             <div className="space-y-6"> {/* Removed pt-4 here */}
-              {currentPost.content.map((paragraph, index) => (
-                <p
-                  key={index}
-                  className="text-black leading-relaxed text-sm md:text-lg lg:text-xl"
-                  style={{
-                    fontFamily: 'Sofia Sans',
-                    fontWeight: '400'
-                  }}
-                >
-                  {paragraph}
-                </p>
-              ))}
+              {currentPost.content.map((paragraph, index) => {
+                // For the first blog post, render section headers as h4, underlined, not bold, with numbers
+                const sectionHeaders = [
+                  "Looking Inward",
+                  "Looking Ahead",
+                  "Looking Around",
+                  "Not Looking"
+                ];
+                const sectionIndex = sectionHeaders.indexOf(paragraph);
+                if (currentPostIndex === 0 && sectionIndex !== -1) {
+                  const number = (sectionIndex + 1).toString().padStart(2, '0');
+                  return (
+                    <h4
+                      key={index}
+                      className="text-black underline mb-2 mt-8 text-base md:text-lg lg:text-xl"
+                      style={{
+                        fontFamily: 'Sofia Sans',
+                        fontWeight: 400,
+                        textDecorationThickness: '2px',
+                        textUnderlineOffset: '4px',
+                      }}
+                    >
+                      {number}. {paragraph}
+                    </h4>
+                  );
+                }
+                // Default paragraph rendering
+                return (
+                  <p
+                    key={index}
+                    className="text-black leading-relaxed text-sm md:text-lg lg:text-xl"
+                    style={{
+                      fontFamily: 'Sofia Sans',
+                      fontWeight: 400,
+                    }}
+                  >
+                    {paragraph}
+                  </p>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -1248,20 +1297,83 @@ function App() {
         <h1 className="uppercase text-4xl font-bold mb-1" style={{ fontFamily: 'dotmatri, serif' }}>
           {currentPost.title}
         </h1>
-        <h2 className="text-base mb-4 leading-relaxed" style={{ fontFamily: 'Sofia Sans, sans-serif' }}>
+        <h2
+          className={`text-base mb-4 leading-relaxed ${currentPostIndex === 0 ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
+          style={
+            currentPostIndex === 0 && currentPost.subtitle === '*or maybe something else entirely.'
+              ? {
+                  fontFamily: 'Sofia Sans',
+                  fontWeight: 400,
+                  color: '#000',
+                  lineHeight: 1.3,
+                }
+              : currentPostIndex === 0
+              ? {
+                  fontFamily: 'Courier Prime, Courier, monospace',
+                  fontWeight: 400,
+                  color: '#6B7280',
+                  lineHeight: 1.3,
+                }
+              : {
+                  fontFamily: 'Sofia Sans, sans-serif',
+                  fontWeight: 400,
+                }
+          }
+        >
           {currentPost.subtitle}
         </h2>
-        <p className="text-sm mb-10" style={{ fontFamily: 'Courier Prime, monospace' }}>
+        <p
+          className={`text-sm mb-10 ${currentPostIndex === 0 ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
+          style={currentPostIndex === 0 ? {
+            fontFamily: 'Courier Prime, Courier, monospace',
+            fontWeight: 400,
+            color: '#6B7280',
+            lineHeight: 1.3,
+          } : {
+            fontFamily: 'Courier Prime, monospace',
+            fontWeight: 400,
+          }}
+        >
           {currentPost.date}
         </p>
         <div className="space-y-6">
-          {currentPost.content.map((paragraph, index) => (
-            <p
-              key={index}
-              className="mb-4 leading-relaxed text-base" style={{ fontFamily: 'Sofia Sans, sans-serif' }}>
-              {paragraph}
-            </p>
-          ))}
+          {currentPost.content.map((paragraph, index) => {
+            // Section headers logic for mobile
+            const sectionHeaders = [
+              "Looking Inward",
+              "Looking Ahead",
+              "Looking Around",
+              "Not Looking"
+            ];
+            const sectionIndex = sectionHeaders.indexOf(paragraph);
+            if (currentPostIndex === 0 && sectionIndex !== -1) {
+              const number = (sectionIndex + 1).toString().padStart(2, '0');
+              return (
+                <h4
+                  key={index}
+                  className="text-black underline mb-2 mt-8 text-base md:text-lg lg:text-xl"
+                  style={{
+                    fontFamily: 'Sofia Sans',
+                    fontWeight: 400,
+                    textDecorationThickness: '2px',
+                    textUnderlineOffset: '4px',
+                  }}
+                >
+                  {number}. {paragraph}
+                </h4>
+              );
+            }
+            // Default paragraph rendering
+            return (
+              <p
+                key={index}
+                className="mb-4 leading-relaxed text-base"
+                style={{ fontFamily: 'Sofia Sans, sans-serif' }}
+              >
+                {paragraph}
+              </p>
+            );
+          })}
         </div>
       </div>
     </div>
