@@ -906,13 +906,14 @@ function App() {
           width: '180px',
           height: '180px',
           backgroundColor: '#ffffff',
-          cursor: isGrabbing ? 'none' : 'grab', // Dynamic cursor
+          cursor: 'none', // Always none, custom cursor will show
         }}
         onMouseDown={startDraggingLogo}
         onMouseMove={dragLogo}
         onMouseUp={stopDraggingLogo}
         onClick={handleLogoClick} // Added onClick handler
         onMouseLeave={stopDraggingLogo}
+        onDragStart={e => e.preventDefault()} // Prevent browser drag
       >
         <img
           src="https://raw.githubusercontent.com/Raeskaa/studionufab/ffdd3e0158bd7e83bfb51a14f710792b29061d90/Group.svg" // Corrected image source URL
@@ -923,6 +924,7 @@ function App() {
             e.currentTarget.src = "https://placehold.co/100x100/000000/FFFFFF?text=Error"; // Fallback image
             console.error("Failed to load SVG icon from URL");
           }}
+          draggable={false}
         />
       </div>
 
@@ -936,12 +938,14 @@ function App() {
           <button
             onClick={prevPost}
             className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+            style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
           >
             <ChevronLeft size={16} className="text-black" />
           </button>
           <button
             onClick={nextPost}
             className="w-8 h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+            style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
           >
             <ChevronRight size={16} className="text-black" />
           </button>
@@ -949,8 +953,9 @@ function App() {
             onClick={randomizeColor}
             className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors ml-2 px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
             title="Randomize background color"
+            style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
           >
-            <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>I'm bored</span>
+            <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>I'm bored</span>
           </button>
         </div>
       )}
@@ -964,15 +969,17 @@ function App() {
               onClick={handleScreenshot}
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Take a screenshot"
+              style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>screenhot</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>screenshot</span>
             </button>
             <button
               onClick={randomizeColor}
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Randomize background color"
+              style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>I'm bored</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>I'm bored</span>
             </button>
           </div>
 
@@ -982,8 +989,9 @@ function App() {
               onClick={() => setShowMoreOptions(!showMoreOptions)}
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="More options"
+              style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>More</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>More</span>
             </button>
             {showMoreOptions && (
               <div
@@ -996,26 +1004,26 @@ function App() {
               >
                 {/* Brush Size Controls */}
                 <div className="flex flex-col gap-1">
-                  <span className="text-black text-sm" style={{ fontFamily: 'Courier Prime' }}>Brush Size:</span>
+                  <span className="text-black text-sm" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>Brush Size:</span>
                   <div className="flex gap-1">
                     <button
                       onClick={() => setBrushWidth(2)}
-                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 2 ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
-                      style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                      className={`h-8 bg-white hover:bg-gray-100 text-black py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 2 ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
+                      style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, fontSize: '0.875rem' }}
                     >
                       Thin
                     </button>
                     <button
                       onClick={() => setBrushWidth(5)}
-                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 5 ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
-                      style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                      className={`h-8 bg-white hover:bg-gray-100 text-black py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 5 ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
+                      style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, fontSize: '0.875rem' }}
                     >
                       Medium
                     </button>
                     <button
                       onClick={() => setBrushWidth(10)}
-                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 10 ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
-                      style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                      className={`h-8 bg-white hover:bg-gray-100 text-black py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 10 ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
+                      style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, fontSize: '0.875rem' }}
                     >
                       Thick
                     </button>
@@ -1024,21 +1032,22 @@ function App() {
 
                 {/* Brush Color Picker */}
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="brushColor" className="text-black text-sm" style={{ fontFamily: 'Courier Prime' }}>Brush Color:</label>
+                  <label htmlFor="brushColor" className="text-black text-sm" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>Brush Color:</label>
                   <input
                     type="color"
                     id="brushColor"
                     value={brushColor}
                     onChange={(e) => setBrushColor(e.target.value)}
                     className="h-8 w-full border border-black cursor-pointer active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+                    style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
                   />
                 </div>
 
                 {/* Eraser Tool */}
                 <button
                   onClick={() => setIsErasing(!isErasing)}
-                  className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${isErasing ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
-                  style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                  className={`h-8 bg-white hover:bg-gray-100 text-black py-1 px-2 rounded-none transition-colors border border-black ${isErasing ? 'bg-gray-200' : ''} active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black`}
+                  style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, fontSize: '0.875rem' }}
                 >
                   {isErasing ? 'Drawing Mode' : 'Eraser Tool'}
                 </button>
@@ -1046,8 +1055,8 @@ function App() {
                 {/* Clear Canvas Button */}
                 <button
                   onClick={handleClearCanvas}
-                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                  style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                  className="h-8 bg-white hover:bg-gray-100 text-black py-1 px-2 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+                  style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, fontSize: '0.875rem' }}
                 >
                   Clear Canvas
                 </button>
@@ -1055,8 +1064,8 @@ function App() {
                 {/* Save Drawing Button */}
                 <button
                   onClick={handleSaveDrawing}
-                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                  style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                  className="h-8 bg-white hover:bg-gray-100 text-black py-1 px-2 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
+                  style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400, fontSize: '0.875rem' }}
                 >
                   Save Drawing
                 </button>
@@ -1078,7 +1087,7 @@ function App() {
             left: framePosition.x,
             width: '55vw',
             height: '70vh',
-            cursor: isGrabbing ? 'none' : 'grab', // Dynamic cursor
+            cursor: 'none', // Always none, custom cursor will show
             position: 'absolute', // Ensure this is explicitly set for positioning children
           }}
           onMouseDown={startDraggingFrame}
@@ -1092,15 +1101,17 @@ function App() {
               onClick={handleScreenshot}
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Take a screenshot"
+              style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>screenhot</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>screenshot</span>
             </button>
             <button
               onClick={handleDeleteBlogClick} // Call the new handler for confirmation
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Delete Blog Frame"
+              style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>dlt</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>dlt</span>
             </button>
           </div>
 
@@ -1229,21 +1240,21 @@ function App() {
       {showDeleteConfirmationModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
-            <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime', }}>
+            <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>
               Delete the blog frame?
             </h3>
             <div className="flex justify-center gap-4">
               <button
                 onClick={confirmDeleteBlog}
                 className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime', }}
+                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
               >
                 Yes
               </button>
               <button
                 onClick={abortDeleteBlog}
                 className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime', }}
+                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
               >
                 Abort
               </button>
@@ -1257,28 +1268,28 @@ function App() {
       {showScreenshotModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
-            <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime', }}>
+            <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>
               Caught you creating
             </h3>
             <div className="flex justify-center gap-4">
               <button
                 onClick={downloadScreenshot}
                 className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime', }}
+                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
               >
                 Save
               </button>
               <button
                 onClick={emailScreenshot}
                 className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime', }}
+                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
               >
                 Share
               </button>
               <button
                 onClick={() => setShowScreenshotModal(false)}
                 className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime', }}
+                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
               >
                 Abort
               </button>
