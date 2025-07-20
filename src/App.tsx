@@ -1650,7 +1650,7 @@ function App() {
             >
               {bullet.type === 'asterisk' ? (
                 <img
-                  src="asterisk.svg"
+                  src="https://raw.githubusercontent.com/Raeskaa/studionufab/refs/heads/main/asterisk.svg"
                   alt="Asterisk Bullet"
                   style={{ width: '20px', height: '20px' }}
                 />
