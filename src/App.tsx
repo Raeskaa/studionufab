@@ -1830,18 +1830,15 @@ function App() {
               pointerEvents: 'none',
             }}
           >
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Gun base */}
-              <rect x="20" y="30" width="20" height="20" rx="6" fill="#222" stroke="#888" strokeWidth="2" />
-              {/* Gun barrel */}
-              <rect x="27" y="10" width="6" height="20" rx="3" fill="#444" stroke="#888" strokeWidth="2" />
-              {/* Gun handle */}
-              <rect x="25" y="45" width="10" height="10" rx="3" fill="#666" stroke="#888" strokeWidth="2" />
-              {/* Muzzle flash */}
-              {isShooting && (
-                <polygon points="30,10 33,0 36,10" fill="#FFD700" />
-              )}
-            </svg>
+            <img
+              src="https://raw.githubusercontent.com/Raeskaa/studionufab/refs/heads/main/Gun.svg"
+              alt="Gun"
+              style={{ width: '60px', height: '60px' }}
+              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                e.currentTarget.src = "https://placehold.co/60x60/000000/FFFFFF?text=🔫"; // Fallback image
+                console.error("Failed to load Gun SVG from URL");
+              }}
+            />
           </div>
           {/* Scoreboard always in top right */}
           {!gameOver && (
