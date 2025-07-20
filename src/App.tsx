@@ -2,6 +2,17 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 
+const colors = [
+  '#1244F1', // Blue
+  '#FE6416', // Orange
+  '#FE9FF5', // Pink
+  '#FF0D01', // Red
+  '#5541BA', // Purple
+  '#ffffff', // White
+  '#E1F532', // Light Green
+];
+
+
 const blogPosts = [
   {
     title: "NUFAB IS A DESIGN STUDIO*",
@@ -29,14 +40,14 @@ const blogPosts = [
   // The following blog post content has been commented out as requested:
   {
     title: "The logo",
-    subtitle: "It has the potential to innovate profoundly at the \"Mind\" and \"Culture\" levels.",
+    subtitle: "It has the potential to innovate profoundly at \"Mind\" and \"Culture\" levels.",
     date: "24 July 2025",
     content: [
       "The first question asked in all design colleges is “what is the difference between art and design?” and following it is the holy revelation of the separation — functionality. This piece of information slips almost boastingly off the design educator’s tongue - Design is functional, Art is merely expressive. Design is selfless, Art is selfish. Design facilitates, Art just is.",
-      "We are passionate antibelievers of the existence of this border. Don’t get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organised paths in creative fields. But this sort of organisation is simply like well-treaded paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design.",
+      "We are passionate antibelievers of the existence of this border. Don’t get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organised paths in creative fields. But this sort of organisation is simply like well-trodded paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design.",
       "I like to think of logos as bite sized pieces of art, like an elaborate thought vacuum-packed into a few pixels. Making a logo feels like a party trick, like making a thought-dove transform into a small white rose and conjuring it back at a swish. Looking at a logo and unpacking its meaning feels like decrypting a message, written in a language with more forgiving boundaries that letters or syllables.",
       "Although a logo is as large as the decrypter, I would like to talk about the Nufab logo in its context. It is a small wax seal to a movement that we hope can envelope anyone and everyone.",
-      "The central form of the logo is a human figure. Inside the context of the circle and square, it is reference to the Vitruvian Man by Da Vinci. It shows humanity, evolution and art. Da Vinci, the designer, artist, scientist and philosopher, inspires Nufab with his urge to be a jack of all trades - a maker that didn’t stick to treaded paths and took to the grass.",
+      "The central form of the logo is a human figure. Inside the context of the circle and square, it is reference to the Vitruvian Man by Da Vinci. It shows humanity, evolution and art. Da Vinci, the designer, artist, scientist and philosopher, inspires Nufab with his urge to be a jack of all trades - a maker that didn’t stick to trodded paths and took to the grass.",
       "The form is carved out of an asterisk. An asterisk implies a footnote, subtext, or contingency — in this case, that “we preserve” but with evolution, and without the stagnant, stale and outdated.",
       "Also quite striking is the eye, with a falling gaze that is almost meditative. It speaks of intentional, unblinking perception that is matter of fact and just. Nufab starts with observation, which gives way to conversation, and then creative action.",
       "In its stylistic entirety, The logo speaks of reform in the system to include human tenderness in contrast with efficiency goals. It speaks of community and reaching out. It speaks of strong, intentional, creative action.",
@@ -139,19 +150,16 @@ function App() {
   const [showNavButtons, setShowNavButtons] = useState(true); // For Chevron buttons and I'm bored
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false); // New state for confirmation modal
 
-  // New state for "More" button visibility
+  // New state for "More" button visibility and drawing tools
   const [showMoreOptions, setShowMoreOptions] = useState(false);
+  const [brushWidth, setBrushWidth] = useState(2); // Default brush width
+  const [brushColor, setBrushColor] = useState('#000000'); // Default brush color (black)
+  const [isErasing, setIsErasing] = useState(false); // State for eraser tool
 
-
-  const colors = [
-    '#1244F1', // Blue
-    '#FE6416', // Orange
-    '#FE9FF5', // Pink
-    '#FF0D01', // Red
-    '#5541BA', // Purple
-    '#ffffff', // White
-    '#E1F532', // Light Green - Added this color
-  ];
+  // State for Undo/Redo
+  const [canvasHistory, setCanvasHistory] = useState<string[]>([]); // Stores canvas data URLs
+  const [historyPointer, setHistoryPointer] = useState(-1); // Points to the current state in history
+  const MAX_HISTORY_STATES = 10; // Max number of states to keep in history
 
 
   // Function to randomize the background color, ensuring it's not the same as the current one
@@ -193,76 +201,74 @@ function App() {
   }, [addEye]);
 
 
-  // Effect hook for canvas initialization, resizing, and dynamically loading html2canvas
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-
-    // Function to resize canvas to full window dimensions
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-
-    resizeCanvas(); // Initial resize
-    window.addEventListener('resize', resizeCanvas); // Add resize listener
-
-
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      ctx.strokeStyle = '#000000'; // Set stroke color to black
-      ctx.lineWidth = 2;           // Set line width
-      ctx.lineCap = 'round';       // Set line cap style
-      ctx.lineJoin = 'round';      // Set line join style
-    }
-
-
-    // Dynamically load html2canvas library
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-    script.async = true;
-    script.onload = () => {
-      console.log('html2canvas loaded');
-    };
-    document.body.appendChild(script);
-
-
-    // Setup inactivity listeners
-    const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart'];
-    activityEvents.forEach(event => {
-      window.addEventListener(event, resetInactivityTimer);
-    });
-
-
-    resetInactivityTimer(); // Start the initial inactivity timer
-
-
-    // Cleanup function to remove event listeners and the dynamically added script
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-      activityEvents.forEach(event => {
-        window.removeEventListener(event, resetInactivityTimer);
-      });
-      if (inactivityTimeoutRef.current) {
-        clearTimeout(inactivityTimeoutRef.current);
-      }
-      if (eyeIntervalRef.current) {
-        clearInterval(eyeIntervalRef.current);
-      }
-    };
-  }, [resetInactivityTimer]); // Depend on resetInactivityTimer
-
-
   // --- Drawing Functions ---
+  const saveCanvasState = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const dataUrl = canvas.toDataURL();
+      setCanvasHistory(prevHistory => {
+        // Discard 'future' states if we've undone and now performing a new action
+        const newHistory = prevHistory.slice(0, historyPointer + 1);
+        newHistory.push(dataUrl);
+        // Enforce max history states
+        const cappedHistory = newHistory.length > MAX_HISTORY_STATES
+          ? newHistory.slice(newHistory.length - MAX_HISTORY_STATES)
+          : newHistory;
+        // Set pointer to the new end
+        setHistoryPointer(cappedHistory.length - 1);
+        return cappedHistory;
+      });
+    }
+  }, [historyPointer, MAX_HISTORY_STATES]); // Depends on historyPointer for slicing, MAX_HISTORY_STATES for capping
+
+
+  const restoreCanvasState = useCallback((index: number) => {
+    const canvas = canvasRef.current;
+    if (canvas && canvasHistory[index]) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        const img = new Image();
+        img.onload = () => {
+          const originalCompositeOperation = ctx.globalCompositeOperation;
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+          ctx.globalCompositeOperation = originalCompositeOperation;
+          // Re-apply current brush settings after restoring image
+          ctx.strokeStyle = brushColor;
+          ctx.lineWidth = brushWidth;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.globalCompositeOperation = isErasing ? 'destination-out' : 'source-over';
+        };
+        img.src = canvasHistory[index];
+      }
+      setHistoryPointer(index);
+    } else {
+    }
+  }, [canvasHistory, brushColor, brushWidth, isErasing]);
+
+
+  const handleUndo = useCallback(() => {
+    if (historyPointer > 0) {
+      restoreCanvasState(historyPointer - 1);
+    }
+  }, [historyPointer, restoreCanvasState]);
+
+
+  const handleRedo = useCallback(() => {
+    if (historyPointer < canvasHistory.length - 1) {
+      restoreCanvasState(historyPointer + 1);
+    }
+  }, [historyPointer, canvasHistory.length, restoreCanvasState]);
+
+
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    // Remove saveCanvasState from here
+    // saveCanvasState();
 
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -287,6 +293,10 @@ function App() {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
+    ctx.strokeStyle = brushColor; // Ensure current color is used
+    ctx.lineWidth = brushWidth; // Eraser uses brush width
+    ctx.globalCompositeOperation = isErasing ? 'destination-out' : 'source-over';
+
 
     ctx.beginPath(); // Start a new path
     ctx.moveTo(lastPosition.x, lastPosition.y); // Move to the last recorded position
@@ -298,9 +308,158 @@ function App() {
   };
 
 
-  const stopDrawing = () => {
+  const stopDrawing = useCallback(() => {
+    if (isDrawing) {
+      saveCanvasState(); // Only save if a stroke was made
+    }
     setIsDrawing(false);
-  };
+  }, [isDrawing, saveCanvasState]);
+
+
+  const handleClearCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      saveCanvasState(); // Save current state before clearing for undo
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        // Temporarily set composite operation to source-over to ensure clearRect works as expected
+        const originalCompositeOperation = ctx.globalCompositeOperation;
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = originalCompositeOperation; // Restore original
+      }
+      // After clearing, save the new empty state
+      saveCanvasState(); // Save the cleared state
+    }
+  }, [saveCanvasState]);
+
+
+  const handleSaveDrawing = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Create a temporary canvas to draw the background and then the drawing
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = canvas.width;
+      tempCanvas.height = canvas.height;
+      const tempCtx = tempCanvas.getContext('2d');
+
+      if (tempCtx) {
+        // Draw background color onto the temporary canvas
+        tempCtx.fillStyle = backgroundColor;
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+        // Draw the main canvas content onto the temporary canvas
+        tempCtx.drawImage(canvas, 0, 0);
+
+        // Get data URL from the temporary canvas
+        const dataUrl = tempCanvas.toDataURL('image/png');
+
+        // Trigger download
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = 'my_drawing_with_background.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  }, [backgroundColor]);
+
+
+  // This useCallback handles resizing and restoring canvas content
+  const resizeCanvasAndRestore = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Capture current content before resizing
+    const currentContentDataUrl = canvas.toDataURL();
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      const img = new Image();
+      img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+      };
+      img.src = currentContentDataUrl;
+    }
+  }, []);
+
+
+  // Main useEffect for canvas setup, window events, initial history
+  const isInitialMount = useRef(true); // Ref to track initial mount
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    // Initial canvas setup and resize handling
+    resizeCanvasAndRestore(); // Call it once on mount
+    window.addEventListener('resize', resizeCanvasAndRestore);
+
+    // Initial save of blank canvas state ONLY ONCE on initial mount
+    if (isInitialMount.current) {
+      if (canvasHistory.length === 0 && historyPointer === -1) {
+        saveCanvasState();
+      }
+      isInitialMount.current = false;
+    }
+
+    // Dynamically load html2canvas library
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    script.async = true;
+    script.onload = () => {
+      console.log('html2canvas loaded');
+    };
+    document.body.appendChild(script);
+
+    // Setup inactivity listeners
+    const activityEvents = ['mousemove', 'mousedown', 'keydown', 'touchstart'];
+    activityEvents.forEach(event => {
+      window.addEventListener(event, resetInactivityTimer);
+    });
+
+    resetInactivityTimer(); // Start the initial inactivity timer
+
+    // Cleanup function for this useEffect
+    return () => {
+      window.removeEventListener('resize', resizeCanvasAndRestore);
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+      activityEvents.forEach(event => {
+        window.removeEventListener(event, resetInactivityTimer);
+      });
+      if (inactivityTimeoutRef.current) {
+        clearTimeout(inactivityTimeoutRef.current);
+      }
+      if (eyeIntervalRef.current) {
+        clearInterval(eyeIntervalRef.current);
+      }
+    };
+  }, [resizeCanvasAndRestore, saveCanvasState, resetInactivityTimer]);
+
+
+  // Effect for updating drawing context properties when brush/eraser settings change
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.strokeStyle = brushColor;
+      ctx.lineWidth = brushWidth;
+      ctx.lineCap = 'round'; // Ensure line cap is round for smooth drawing/erasing
+      ctx.lineJoin = 'round'; // Ensure line join is round for smooth drawing/erasing
+      ctx.globalCompositeOperation = isErasing ? 'destination-out' : 'source-over';
+    }
+  }, [brushWidth, brushColor, isErasing]); // Only depends on drawing properties
 
 
   // --- Pencil Cursor Functions ---
@@ -689,19 +848,19 @@ function App() {
 
       {!isGrabbing && showPencil && ( // Only show pencil if not grabbing
         <img
-          src="https://raw.githubusercontent.com/Raeskaa/studionufab/59d263299b8c3990bd561abbd995c9f13409b6ac/Cursor%20for%20Blog.svg" // Updated pencil SVG URL
+          src="https://raw.githubusercontent.com/Raeskaa/studionufab/59d263299b8c3990bd561abbd995c9f13409b6ac/Cursor%20for%20Blog.svg"
           alt="Pencil Cursor"
-          className="absolute z-50" // High z-index to be on top
+          className="absolute z-50"
           style={{
             top: pencilPosition.y,
             left: pencilPosition.x,
-            pointerEvents: 'none', // Critical: allows clicks/drawing to pass through
-            transform: `translate(-50%, -50%) scale(${cursorScale})`, // Apply dynamic scale
-            width: '32px', // Base width
-            height: '32px', // Base height
+            pointerEvents: 'none',
+            transform: `translate(-50%, -50%) scale(${cursorScale})`,
+            width: '32px',
+            height: '32px',
           }}
           onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-            e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✏️"; // Fallback image
+            e.currentTarget.src = "https://placehold.co/32x32/000000/FFFFFF?text=✏️";
             console.error("Failed to load Pencil SVG icon from URL");
           }}
         />
@@ -825,34 +984,77 @@ function App() {
             >
               <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>More</span>
             </button>
-            {/* You can add more options here when showMoreOptions is true */}
-            {/* Example:
             {showMoreOptions && (
               <div className="absolute top-full right-0 mt-2 flex flex-col gap-2 bg-white border border-black p-2 shadow-lg">
+                {/* Brush Size Controls */}
+                <div className="flex flex-col gap-1">
+                  <span className="text-black text-sm" style={{ fontFamily: 'Courier Prime' }}>Brush Size:</span>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => setBrushWidth(2)}
+                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 2 ? 'bg-gray-200' : ''}`}
+                      style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                    >
+                      Thin
+                    </button>
+                    <button
+                      onClick={() => setBrushWidth(5)}
+                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 5 ? 'bg-gray-200' : ''}`}
+                      style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                    >
+                      Medium
+                    </button>
+                    <button
+                      onClick={() => setBrushWidth(10)}
+                      className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${brushWidth === 10 ? 'bg-gray-200' : ''}`}
+                      style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                    >
+                      Thick
+                    </button>
+                  </div>
+                </div>
+
+                {/* Brush Color Picker */}
+                <div className="flex flex-col gap-1">
+                  <label htmlFor="brushColor" className="text-black text-sm" style={{ fontFamily: 'Courier Prime' }}>Brush Color:</label>
+                  <input
+                    type="color"
+                    id="brushColor"
+                    value={brushColor}
+                    onChange={(e) => setBrushColor(e.target.value)}
+                    className="h-8 w-full border border-black cursor-pointer"
+                  />
+                </div>
+
+                {/* Eraser Tool */}
                 <button
-                  onClick={() => console.log('Brush Width clicked')}
+                  onClick={() => setIsErasing(!isErasing)}
+                  className={`h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black ${isErasing ? 'bg-gray-200' : ''}`}
+                  style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                >
+                  {isErasing ? 'Drawing Mode' : 'Eraser Tool'}
+                </button>
+
+                {/* Clear Canvas Button */}
+                <button
+                  onClick={handleClearCanvas}
                   className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black"
                   style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
                 >
-                  Brush Width
+                  Clear Canvas
                 </button>
+
+                {/* Save Drawing Button */}
                 <button
-                  onClick={() => console.log('Go Back clicked')}
+                  onClick={handleSaveDrawing}
                   className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black"
                   style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
                 >
-                  Go Back
+                  Save Drawing
                 </button>
-                <button
-                  onClick={() => console.log('Gravity clicked')}
-                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black"
-                  style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
-                >
-                  Gravity
-                </button>
+
               </div>
             )}
-            */}
           </div>
         </>
       )}
