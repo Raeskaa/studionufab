@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Asterisk from '../asterisk.svg';
 
 
 const colors = [
@@ -1113,7 +1114,24 @@ function App() {
                 fontWeight: '400'
               }}
             >
-              {currentPost.title}
+              {currentPostIndex === 0 ? (
+                <span style={{ display: 'inline-block' }}>
+                  NUFAB IS A DESIGN STUDIO
+                  <img
+                    src={Asterisk}
+                    alt="Asterisk"
+                    style={{
+                      display: 'inline',
+                      height: '0.35em',
+                      width: 'auto',
+                      verticalAlign: 'super',
+                      marginLeft: '0.1em',
+                    }}
+                  />
+                </span>
+              ) : (
+                currentPost.title
+              )}
             </h1>
 
 
@@ -1295,30 +1313,33 @@ function App() {
 
 
         <h1 className="uppercase text-4xl font-bold mb-1" style={{ fontFamily: 'dotmatri, serif' }}>
-          {currentPost.title}
+          {currentPostIndex === 0 ? (
+            <span style={{ display: 'inline-block' }}>
+              NUFAB IS A DESIGN STUDIO
+              <img
+                src={Asterisk}
+                alt="Asterisk"
+                style={{
+                  display: 'inline',
+                  height: '0.35em',
+                  width: 'auto',
+                  verticalAlign: 'super',
+                  marginLeft: '0.1em',
+                }}
+              />
+            </span>
+          ) : (
+            currentPost.title
+          )}
         </h1>
         <h2
-          className={`text-base mb-4 leading-relaxed ${currentPostIndex === 0 ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
-          style={
-            currentPostIndex === 0 && currentPost.subtitle === '*or maybe something else entirely.'
-              ? {
-                  fontFamily: 'Sofia Sans',
-                  fontWeight: 400,
-                  color: '#000',
-                  lineHeight: 1.3,
-                }
-              : currentPostIndex === 0
-              ? {
-                  fontFamily: 'Courier Prime, Courier, monospace',
-                  fontWeight: 400,
-                  color: '#6B7280',
-                  lineHeight: 1.3,
-                }
-              : {
-                  fontFamily: 'Sofia Sans, sans-serif',
-                  fontWeight: 400,
-                }
-          }
+          className={`mb-4 leading-relaxed text-base ${currentPostIndex === 0 ? 'text-gray-500 leading-snug' : ''}`}
+          style={{
+            fontFamily: 'Sofia Sans, sans-serif',
+            fontWeight: 400,
+            color: currentPostIndex === 0 && currentPost.subtitle === '*or maybe something else entirely.' ? '#000' : (currentPostIndex === 0 ? '#6B7280' : undefined),
+            lineHeight: 1.3,
+          }}
         >
           {currentPost.subtitle}
         </h2>
