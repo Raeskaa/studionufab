@@ -44,6 +44,15 @@ const blogPosts = [
     ]
   },
   */
+  {
+    title: "Minimalism in modern design",
+    subtitle: "The power of intentional simplicity",
+    date: "08 July 2025",
+    content: [
+      "Less is more – a principle that has guided designers for decades. Minimalism isn't just about removing elements; it's about distilling ideas to their purest form. Every line, every space, every color choice becomes intentional and meaningful.",
+      "The challenge of minimalist design lies not in what you include, but in what you choose to leave out. It requires a deep understanding of hierarchy, balance, and the subtle power of negative space to communicate effectively."
+    ]
+  }
 ];
 
 // Helper function to get the initial post index from the URL
@@ -129,6 +138,9 @@ function App() {
   const [showBlogContentFrame, setShowBlogContentFrame] = useState(true);
   const [showNavButtons, setShowNavButtons] = useState(true); // For Chevron buttons and I'm bored
   const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false); // New state for confirmation modal
+
+  // New state for "More" button visibility
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
 
 
   const colors = [
@@ -597,7 +609,7 @@ function App() {
   const confirmDeleteBlog = () => {
     setShowBlogContentFrame(false);
     setShowNavButtons(false); // Hide chevron and "I'm bored" buttons
-
+    setShowMoreOptions(false); // Hide more options if they were open
 
     setShowDeleteConfirmationModal(false); // Close confirmation modal
   };
@@ -786,22 +798,63 @@ function App() {
 
       {/* Buttons after deletion (I'm bored and Screenshot) */}
       {!showBlogContentFrame && (
-        <div className="fixed bottom-5 right-5 flex gap-4 z-40">
-          <button
-            onClick={handleScreenshot}
-            className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
-            title="Take a screenshot"
-          >
-            <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Screenshot</span>
-          </button>
-          <button
-            onClick={randomizeColor}
-            className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
-            title="Randomize background color"
-          >
-            <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>I'm bored</span>
-          </button>
-        </div>
+        <>
+          <div className="fixed bottom-5 right-5 flex gap-4 z-40">
+            <button
+              onClick={handleScreenshot}
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              title="Take a screenshot"
+            >
+              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Screenshot</span>
+            </button>
+            <button
+              onClick={randomizeColor}
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              title="Randomize background color"
+            >
+              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>I'm bored</span>
+            </button>
+          </div>
+
+          {/* "More" button at top right */}
+          <div className="fixed top-5 right-5 z-40">
+            <button
+              onClick={() => setShowMoreOptions(!showMoreOptions)}
+              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
+              title="More options"
+            >
+              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>More</span>
+            </button>
+            {/* You can add more options here when showMoreOptions is true */}
+            {/* Example:
+            {showMoreOptions && (
+              <div className="absolute top-full right-0 mt-2 flex flex-col gap-2 bg-white border border-black p-2 shadow-lg">
+                <button
+                  onClick={() => console.log('Brush Width clicked')}
+                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black"
+                  style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                >
+                  Brush Width
+                </button>
+                <button
+                  onClick={() => console.log('Go Back clicked')}
+                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black"
+                  style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                >
+                  Go Back
+                </button>
+                <button
+                  onClick={() => console.log('Gravity clicked')}
+                  className="h-8 bg-white hover:bg-gray-100 text-black font-bold py-1 px-2 rounded-none transition-colors border border-black"
+                  style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}
+                >
+                  Gravity
+                </button>
+              </div>
+            )}
+            */}
+          </div>
+        </>
       )}
 
 
@@ -828,16 +881,16 @@ function App() {
             <button
               onClick={handleScreenshot}
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
-              title="Take a screenhot"
+              title="Take a screenshot"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Screenhot</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Screenshot</span>
             </button>
             <button
               onClick={handleDeleteBlogClick} // Call the new handler for confirmation
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2"
-              title="Dlt Blog Frame"
+              title="Delete Blog Frame"
             >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Dlt</span>
+              <span className="text-black" style={{ fontFamily: 'Courier Prime', fontSize: '0.875rem' }}>Delete</span>
             </button>
           </div>
 
@@ -869,7 +922,7 @@ function App() {
             <p
               className="text-black mb-8 text-xs md:text-sm"
               style={{
-                fontFamily: 'Courier Prime, monospace', // Fixed: removed extra single quote
+                fontFamily: 'Courier Prime, monospace',
                 fontWeight: '400'
               }}
             >
@@ -901,7 +954,7 @@ function App() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
             <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime', }}>
-              Dlt the blog frame?
+              Delete the blog frame?
             </h3>
             <div className="flex justify-center gap-4">
               <button
@@ -989,7 +1042,7 @@ function App() {
         <h2 className="text-base mb-4 leading-relaxed" style={{ fontFamily: 'Sofia Sans, sans-serif' }}>
           {currentPost.subtitle}
         </h2>
-        <p className="text-sm mb-10" style={{ fontFamily: 'Courier Prime, monospace' }}> {/* Fixed: removed extra single quote */}
+        <p className="text-sm mb-10" style={{ fontFamily: 'Courier Prime, monospace' }}>
           {currentPost.date}
         </p>
         <div className="space-y-6">
