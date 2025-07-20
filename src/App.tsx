@@ -4,16 +4,21 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const blogPosts = [
 {
-  title: "What is the difference between art and design?",
-  subtitle: "Exploring the boundaries of creative expression",
-  date: "24 July 2025",
-  content: [
-    "The first question asked in all design colleges is \"what is the difference between art and design?\" and following it is the holy revelation of the separation — functionality. This piece of information slips almost boastingly off the design educator's tongue – Design is functional, Art is merely expressive. Design is selfless, Art is selfish. Design facilitates, Art just is.",
-    "We are passionate anti-believers of the existence of this border. Don't get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organized paths in creative fields. But this sort of organization is simply like well-trodden paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design.",
-    "The first question asked in all design colleges is \"what is the difference between art and design?\" and following it is the holy revelation of the separation — functionality. This piece of information slips almost boastingly off the design educator's tongue – Design is functional, Art is merely expressive. Design is selfless, Art is selfish. Design facilitates, Art just is.",
-    "We are passionate anti-believers of the existence of this border. Don't get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organized paths in creative fields. But this sort of organization is simply like well-trodden paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design."
-  ]
-},
+    title: "The logo",
+    subtitle: "It has the potential to innovate profoundly at the \"Mind\" and \"Culture\" levels.",
+    date: "24 July 2025",
+    content: [
+      "The first question asked in all design colleges is “what is the difference between art and design?” and following it is the holy revelation of the separation — functionality. This piece of information slips almost boastingly off the design educator’s tongue - Design is functional, Art is merely expressive. Design is selfless, Art is selfish. Design facilitates, Art just is.",
+      "We are passionate antibelievers of the existence of this border. Don’t get me wrong, I too have walked alongside it, like an ant bound by a line of chalk. But careless trespassing with wonderful consequences has lead me to believe that the border is fictitious, created perhaps to compensate for the lack of organised paths in creative fields. But this sort of organisation is simply like well-treaded paths in an endless grassy field. I believe that it really is free-range here, and there simply is nothing that cannot be design.",
+      "I like to think of logos as bite sized pieces of art, like an elaborate thought vacuum-packed into a few pixels. Making a logo feels like a party trick, like making a thought-dove transform into a small white rose and conjuring it back at a swish. Looking at a logo and unpacking its meaning feels like decrypting a message, written in a language with more forgiving boundaries that letters or syllables.",
+      "Although a logo is as large as the decrypter, I would like to talk about the Nufab logo in its context. It is a small wax seal to a movement that we hope can envelope anyone and everyone.",
+      "The central form of the logo is a human figure. Inside the context of the circle and square, it is reference to the Vitruvian Man by Da Vinci. It shows humanity, evolution and art. Da Vinci, the designer, artist, scientist and philosopher, inspires Nufab with his urge to be a jack of all trades - a maker that didn’t stick to treaded paths and took to the grass.",
+      "The form is carved out of an asterisk. An asterisk implies a footnote, subtext, or contingency — in this case, that “we preserve” but with evolution, and without the stagnant, stale and outdated.",
+      "Also quite striking is the eye, with a falling gaze that is almost meditative. It speaks of intentional, unblinking perception that is matter of fact and just. Nufab starts with observation, which gives way to conversation, and then creative action.",
+      "In its stylistic entirety, The logo speaks of reform in the system to include human tenderness in contrast with efficiency goals. It speaks of community and reaching out. It speaks of strong, intentional, creative action.",
+      "The logotype weaves different accents into the english name. The Dot beneath the F not only represents the Nuqta used in writing the word in devanagari, but also is our Nazar ka Teeka onto our beloved."
+    ]
+  },
 {
   title: "Minimalism in modern design",
   subtitle: "The power of intentional simplicity",
@@ -702,8 +707,8 @@ style={{ pointerEvents: 'auto', cursor: 'none' }} // Hide default cursor
           src="https://raw.githubusercontent.com/Raeskaa/studionufab/ec81588c796d013bbd3fcb4d473985d8e0f87a8b/Nufab%20Eye%20White.svg" // Use external SVG
           alt="Eye Icon"
           style={{
-            width: '89.6px', // Reduced size to 70% of 128px
-            height: '89.6px', // Reduced size to 70% of 128px
+            width: '80.6px', // Reduced size to 70% of 128px
+            height: '80.6px', // Reduced size to 70% of 128px
             transform: `rotate(${eye.rotation}deg)`, // Apply rotation
           }}
           onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
