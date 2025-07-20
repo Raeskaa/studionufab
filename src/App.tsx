@@ -1013,6 +1013,9 @@ function App() {
       setEyes([]);
       setBullets([]);
       setGunX(window.innerWidth / 2);
+      setKillCount(0); // Reset kill count
+      setGameOver(false); // Reset game over state
+      setInitialEyesLeft(10); // Reset initial eyes left
       setShowMoreOptions(false); // Close the More dialog when entering game mode
     }
   };
@@ -1220,7 +1223,7 @@ function App() {
 
 
       {/* Buttons after deletion (I'm bored and Screenshot) */}
-      {!showBlogContentFrame && (
+      {!showBlogContentFrame && !gameMode && (
         <>
           <div className="fixed bottom-5 right-5 flex gap-4 z-40">
             <button
