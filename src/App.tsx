@@ -92,8 +92,7 @@ function App() {
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
   const [currentPostIndex, setCurrentPostIndex] = useState(getInitialPostIndex);
   const [backgroundColor, setBackgroundColor] = useState('#1244F1'); // Changed initial background color to blue
-  const [showScreenshotModal, setShowScreenshotModal] = useState(false);
-  const [screenshotDataUrl, setScreenshotDataUrl] = useState('');
+
 
 
   // Initial dimensions for the blog frame
@@ -629,119 +628,6 @@ function App() {
   };
 
 
-  // --- Screenshot Functions ---
-  const handleScreenshot = async () => {
-    if (typeof (window as any).html2canvas === 'undefined') {
-      console.error('html2canvas is not loaded.');
-      // Using a custom message box instead of alert()
-      const modal = document.createElement('div');
-      modal.className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
-      modal.innerHTML = `
-        <div class="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
-          <h3 class="text-lg font-bold mb-4 text-black" style="font-family: 'Courier Prime', monospace;">
-            Screenshot functionality is not ready yet. Please try again in a moment.
-          </h3>
-          <button id="closeScreenshotModal" class="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black" style="font-family: 'Courier Prime', monospace;">
-            Close
-          </button>
-        </div>
-      `;
-      document.body.appendChild(modal);
-      document.getElementById('closeScreenshotModal')?.addEventListener('click', () => {
-        document.body.removeChild(modal);
-      });
-      return;
-    }
-
-    // Add a small delay to ensure all elements are rendered and settled
-    setTimeout(async () => {
-      try {
-        const canvas = await (window as any).html2canvas(document.body, {
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: null,
-          width: window.innerWidth,
-          height: window.innerHeight,
-          scrollX: 0,
-          scrollY: 0,
-          windowWidth: window.innerWidth,
-          windowHeight: window.innerHeight,
-          foreignObjectRendering: true,
-          removeContainer: true,
-          scale: 1,
-          logging: false,
-          ignoreElements: (element: Element) => {
-            // Ignore any modals or overlays that shouldn't be in screenshot
-            return element.classList.contains('screenshot-modal') || 
-                   element.classList.contains('modal-overlay');
-          }
-        });
-        const dataUrl = canvas.toDataURL('image/png');
-        setScreenshotDataUrl(dataUrl);
-        setShowScreenshotModal(true);
-      } catch (error) {
-        console.error('Error capturing screenshot:', error);
-        // Using a custom message box instead of alert()
-        const modal = document.createElement('div');
-        modal.className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
-        modal.innerHTML = `
-          <div class="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
-            <h3 class="text-lg font-bold mb-4 text-black" style="font-family: 'Courier Prime', monospace;">
-              Failed to capture screenshot. Please try again.
-            </h3>
-            <button id="closeScreenshotModal" class="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black" style="font-family: 'Courier Prime', monospace;">
-              Close
-            </button>
-          </div>
-        `;
-        document.body.appendChild(modal);
-        document.getElementById('closeScreenshotModal')?.addEventListener('click', () => {
-          document.body.removeChild(modal);
-        });
-      }
-    }, 200); // Increased delay to 200ms for better rendering
-  };
-
-
-  const downloadScreenshot = () => {
-    const link = document.createElement('a');
-    link.href = screenshotDataUrl;
-    link.download = 'masterpiece.png'; // Changed filename here
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    setShowScreenshotModal(false);
-  };
-
-
-  const emailScreenshot = () => {
-    // Note: Direct attachment of local files via mailto: is not supported by browsers for security reasons.
-    // Users will still need to manually attach the screenshot after the email client opens.
-    const emailAddress = 'people@nufab.studio'; // Updated email address
-    const subject = encodeURIComponent('Screenshot from Blog App');
-    const body = encodeURIComponent('Hello,\n\nPlease find the attached screenshot from the interactive blog app. You may need to manually attach the image file after this email opens.\n\nBest regards,');
-    // Using a custom message box instead of alert()
-    const modal = document.createElement('div');
-    modal.className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
-    modal.innerHTML = `
-      <div class="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
-        <h3 class="text-lg font-bold mb-4 text-black" style="font-family: 'Courier Prime', monospace;">
-          Your email client has opened. Please remember to manually attach the screenshot to the email.
-        </h3>
-        <button id="closeEmailModal" class="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black" style="font-family: 'Courier Prime', monospace;">
-          Close
-        </button>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    document.getElementById('closeEmailModal')?.addEventListener('click', () => {
-      document.body.removeChild(modal);
-    });
-    window.open(`mailto:${emailAddress}?subject=${subject}&body=${body}`, '_blank');
-    setShowScreenshotModal(false);
-  };
-
-
   // --- Draggable Frame Functions ---
   const startDraggingFrame = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!blogFrameRef.current) return;
@@ -1227,14 +1113,6 @@ function App() {
         <>
           <div className="fixed bottom-5 right-5 flex gap-4 z-40">
             <button
-              onClick={handleScreenshot}
-              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-              title="Take a screenshot"
-              style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
-            >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>screenshot</span>
-            </button>
-            <button
               onClick={randomizeColor}
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
               title="Randomize background color"
@@ -1391,16 +1269,8 @@ function App() {
             setIsGrabbing(false);
           }}
         >
-          {/* Screenshot and Delete Buttons - Fixed position relative to blogFrameRef */}
+          {/* Delete Button - Fixed position relative to blogFrameRef */}
           <div className="absolute top-4 left-4 flex gap-2 z-20">
-            <button
-              onClick={handleScreenshot}
-              className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-              title="Take a screenshot"
-              style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
-            >
-              <span className="text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontSize: '0.875rem' }}>screenshot</span>
-            </button>
             <button
               onClick={handleDeleteBlogClick} // Call the new handler for confirmation
               className="h-8 bg-white hover:bg-gray-100 border border-black flex items-center justify-center transition-colors px-2 active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
@@ -1604,39 +1474,7 @@ function App() {
       )}
 
 
-      {/* Screenshot Modal */}
-      {showScreenshotModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-none shadow-lg text-center border-2 border-black">
-            <h3 className="text-lg font-bold mb-4 text-black" style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}>
-              All Yours.
-            </h3>
-            <div className="flex justify-center gap-4">
-              <button
-                onClick={downloadScreenshot}
-                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
-              >
-                Save
-              </button>
-              <button
-                onClick={emailScreenshot}
-                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
-              >
-                Share
-              </button>
-              <button
-                onClick={() => setShowScreenshotModal(false)}
-                className="bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded-none transition-colors border border-black active:scale-95 hover:shadow-lg focus:outline-none focus:ring-1 focus:ring-black"
-                style={{ fontFamily: 'Courier Prime, Courier, monospace', fontWeight: 400 }}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
 
 
       {/* Mobile Blog Content - Hidden by default for desktop, shown on mobile */}
