@@ -59,9 +59,9 @@ const blogPosts = [
   {
     title: "This blog doesn't exist",
     subtitle: "*yet",
-    date: "",
+    date: "Hi, Reader. Looking for more? We post when we have something worthwhile to say. Come back soon for something fresh!",
     content: [
-      "Hi, Reader. Looking for more? We post when we have something worthwhile to say. Come back soon for something fresh!"
+      ""
     ]
   }
 ];
@@ -262,6 +262,7 @@ function App() {
         newHistory.push(dataUrl);
         // Enforce max history states
         const cappedHistory = newHistory.length > MAX_HISTORY_STATES
+        
           ? newHistory.slice(newHistory.length - MAX_HISTORY_STATES)
           : newHistory;
         // Set pointer to the new end
@@ -1353,8 +1354,8 @@ function App() {
 
 
             <p
-              className={`text-base mb-10 ${currentPostIndex === 0 ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
-              style={currentPostIndex === 0 ? {
+              className={`text-base mb-10 ${(currentPostIndex === 0 || currentPostIndex === 1) ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
+              style={(currentPostIndex === 0 || currentPostIndex === 1) ? {
                 fontFamily: 'Courier Prime, Courier, monospace',
                 fontWeight: 400,
                 color: '#6B7280',
@@ -1548,8 +1549,8 @@ function App() {
           {currentPost.subtitle}
         </h2>
         <p
-          className={`text-base mb-10 ${currentPostIndex === 0 ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
-          style={currentPostIndex === 0 ? {
+          className={`text-base mb-10 ${(currentPostIndex === 0 || currentPostIndex === 1) ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
+          style={(currentPostIndex === 0 || currentPostIndex === 1) ? {
             fontFamily: 'Courier Prime, Courier, monospace',
             fontWeight: 400,
             color: '#6B7280',
@@ -1586,6 +1587,23 @@ function App() {
                 >
                   {number}. {paragraph}
                 </h4>
+              );
+            }
+            // Special style for "Hi, Reader..." in second blog (first paragraph)
+            if (currentPostIndex === 1 && index === 0) {
+              return (
+                <p
+                  key={index}
+                  className="text-gray-500 text-sm md:text-base lg:text-lg leading-snug mb-4"
+                  style={{
+                    fontFamily: 'Courier Prime, Courier, monospace',
+                    fontWeight: 400,
+                    color: '#6B7280',
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {paragraph}
+                </p>
               );
             }
             // Default paragraph rendering
