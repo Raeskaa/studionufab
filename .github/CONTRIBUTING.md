@@ -40,6 +40,21 @@ npm run dev     # start the Vite dev server at http://localhost:5173
 - A small asterisk icon is automatically inserted at the start of subtitles.
 - Content should be an array of strings, one paragraph per entry.
 
+#### Add a new blog post (step-by-step)
+1. Open `src/App.tsx` and locate the `blogPosts` array.
+2. Copy an existing post object as a template and paste it after the last one.
+3. Fill in:
+   - `title`: string (the asterisk icon is added automatically in UI)
+   - `subtitle`: string or array of strings (array = multiple spaced paragraphs)
+   - `date`: short blurb or date string
+   - `content`: array of strings (each entry is one paragraph)
+4. Follow ordering rules above (Post 2 layout is different by design).
+5. Run locally and verify: `npm run dev` → http://localhost:5173
+
+Tips:
+- Keep lines reasonably short; let the renderer handle wrapping.
+- For deliberate line breaks inside a paragraph, use `\n`.
+
 ## 5) Typical workflow
 1) Update main and create a branch
 ```bash
@@ -68,6 +83,20 @@ npm run deploy
 - Live (without custom domain): https://raeskaa.github.io/studionufab/
 - If using a custom domain, ensure a CNAME file is present during deploy.
 
+### Keeping GoDaddy in sync
+If GoDaddy hosts a separate copy of the site, you have two options:
+
+1) Manual upload
+- Build locally: `npm run build` (outputs to `dist/`)
+- Upload `dist/` contents to GoDaddy `public_html` (overwrite existing)
+- Ensure `.htaccess` is present for client routing
+
+2) Use GitHub Pages as the live source and point your domain to it
+- Configure your domain’s DNS to point to GitHub Pages (CNAME or A/AAAA records)
+- Then `npm run deploy` is all you need; no GoDaddy upload required
+
+Note: DNS changes can take 5–30 minutes (sometimes longer) to propagate.
+
 ## 7) Common git tasks
 - Sync your branch:
 ```bash
@@ -92,5 +121,7 @@ git reset --hard HEAD~1   # discard changes
 ## 9) Help
 - Open a draft PR and describe what you’re trying to do.
 - Add screenshots or a short screen recording for UI changes.
+ - If stuck on Git/GitHub basics, ask in the PR or check: https://docs.github.com/en/get-started
+ - If the dev server won’t start, run `npm ci` again and re-open the terminal.
 
 Thanks for contributing! 🙌
