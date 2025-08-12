@@ -16,7 +16,7 @@ const colors = [
 const blogPosts = [
   {
     title: "NUFAB IS A DESIGN STUDIO*",
-    subtitle: "*or maybe something else entirely.",
+    subtitle: "or maybe something else entirely.",
     date: "Hi, reader. Welcome to a media anomaly: long form content. This one's a 3 minute read. Oh, and if the words don't hold you, don't be afraid to wander.",
     content: [
       "Some shared opinions about culture, some inter-generational dialogue, some free love – and Nufab was conceived as a fragile idea, unexpectedly. But that was a long time ago. It has wandered, been wrong, changed and grown. What remains the same is what truly defines us. And we're ready to share it with you.",
@@ -49,8 +49,7 @@ const blogPosts = [
       "The logotype weaves different accents into the English name. The Dot beneath the F not only represents the Nuqta used in writing the word in devanagari, but also acts as our Nazar ka Teeka onto our beloved.",
     ],
     subtitle: [
-      ".",
-      "*We like to think of logos as bite sized pieces of art – like an elaborate thought vacuum-packed into a few pixels. Making a logo feels like a party trick: like making a thought-dove transform into a small white rose and conjuring it back at a swish. Understanding a logo, as with any piece of art, feels like decrypting a message, written in a language with more forgiving boundaries than letters or syllables.",
+      "We like to think of logos as bite sized pieces of art – like an elaborate thought vacuum-packed into a few pixels. Making a logo feels like a party trick: like making a thought-dove transform into a small white rose and conjuring it back at a swish. Understanding a logo, as with any piece of art, feels like decrypting a message, written in a language with more forgiving boundaries than letters or syllables.",
       "The first thing designers are taught is the holy distinction between art and design: functionality. It slips almost boastfully off the educator’s tongue – Design is functional, Art is merely expressive.",
       "Design is selfless, Art is selfish.",
       "Design facilitates, Art just is.",
@@ -81,7 +80,7 @@ const blogPosts = [
   */
   {
     title: "This blog doesn't exist",
-    subtitle: "*yet",
+    subtitle: "yet",
     date: "Hi, Reader. Looking for more? We post when we have something worthwhile to say. Come back soon for something fresh!",
     content: [
       ""
@@ -1358,6 +1357,17 @@ function App() {
                       className="text-black leading-tight text-sm md:text-lg lg:text-xl mb-6"
                       style={{ fontFamily: 'Sofia Sans', fontWeight: 400, color: '#000', lineHeight: 1.3 }}
                     >
+                      <img
+                        src={Asterisk}
+                        alt="Asterisk"
+                        style={{
+                          display: 'inline',
+                          height: '0.5em',
+                          width: 'auto',
+                          verticalAlign: 'baseline',
+                          marginRight: '0.3em',
+                        }}
+                      />
                       {para}
                     </h2>
                   ))}
@@ -1367,6 +1377,17 @@ function App() {
                   className="text-black mb-8 leading-tight text-sm md:text-lg lg:text-xl"
                   style={{ fontFamily: 'Sofia Sans', fontWeight: 400, color: '#000', lineHeight: 1.3 }}
                 >
+                  <img
+                    src={Asterisk}
+                    alt="Asterisk"
+                    style={{
+                      display: 'inline',
+                      height: '0.5em',
+                      width: 'auto',
+                      verticalAlign: 'baseline',
+                      marginRight: '0.3em',
+                    }}
+                  />
                   {currentPost.subtitle as string}
                 </h2>
               )
@@ -1473,6 +1494,13 @@ function App() {
                         className="text-black leading-tight text-sm md:text-lg lg:text-xl mb-6"
                         style={{ fontFamily: 'Sofia Sans', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
                       >
+                        {idx === 0 && (
+                          <img
+                            src={Asterisk}
+                            alt="Asterisk"
+                            style={{ display: 'inline', height: '0.5em', width: 'auto', verticalAlign: 'baseline', marginRight: '0.3em' }}
+                          />
+                        )}
                         {para}
                       </p>
                     ))
@@ -1482,6 +1510,13 @@ function App() {
                         className="text-black leading-tight text-sm md:text-lg lg:text-xl mb-6"
                         style={{ fontFamily: 'Sofia Sans', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
                       >
+                        {idx === 0 && (
+                          <img
+                            src={Asterisk}
+                            alt="Asterisk"
+                            style={{ display: 'inline', height: '0.5em', width: 'auto', verticalAlign: 'baseline', marginRight: '0.3em' }}
+                          />
+                        )}
                         {para}
                       </p>
                     ))}
@@ -1649,27 +1684,31 @@ function App() {
 
         {/* Second blog: subtitle at end; render spaced paragraphs for mobile. Supports string or string[] */}
         {currentPostIndex === 1 && currentPost.subtitle && (
-          <div className="mt-10">
-            {Array.isArray(currentPost.subtitle)
-              ? currentPost.subtitle.map((para: string, idx: number) => (
-                  <p
-                    key={idx}
-                    className="text-black leading-tight text-base mb-6"
-                    style={{ fontFamily: 'Sofia Sans, sans-serif', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
-                  >
-                    {para}
-                  </p>
-                ))
-              : (currentPost.subtitle as string).split('\n\n').map((para, idx) => (
-                  <p
-                    key={idx}
-                    className="text-black leading-tight text-base mb-6"
-                    style={{ fontFamily: 'Sofia Sans, sans-serif', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
-                  >
-                    {para}
-                  </p>
-                ))}
-          </div>
+            <div className="mt-10">
+              {/* Single asterisk at the start of the subtitle block (mobile) */}
+              <p className="text-black leading-tight text-base mb-3" style={{ fontFamily: 'Sofia Sans, sans-serif', fontWeight: 400 }}>
+                <img src={Asterisk} alt="Asterisk" style={{ display: 'inline', height: '0.5em', width: 'auto', verticalAlign: 'baseline', marginRight: '0.3em' }} />
+              </p>
+              {Array.isArray(currentPost.subtitle)
+                ? currentPost.subtitle.map((para: string, idx: number) => (
+                    <p
+                      key={idx}
+                      className="text-black leading-tight text-base mb-6"
+                      style={{ fontFamily: 'Sofia Sans, sans-serif', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
+                    >
+                      {para}
+                    </p>
+                  ))
+                : (currentPost.subtitle as string).split('\n\n').map((para, idx) => (
+                    <p
+                      key={idx}
+                      className="text-black leading-tight text-base mb-6"
+                      style={{ fontFamily: 'Sofia Sans, sans-serif', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
+                    >
+                      {para}
+                    </p>
+                  ))}
+            </div>
         )}
       </div>
 
