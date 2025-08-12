@@ -38,8 +38,7 @@ const blogPosts = [
     ]
   },
   {
-    title: "OUR LOGO*",
-    subtitle: "*or maybe something else entirely.",
+    title: "OUR LOGO",
     date: "Hi, Reader. Here’s another little detour from scrollable content. This one’s a 5 minute read about our logo, definitions and intersections.",
     content: [
       "Although our logo is open to the decrypter, we would like to talk about its origin. It is a small wax seal to a movement that we hope can envelope our people.",
@@ -48,6 +47,9 @@ const blogPosts = [
       "The eye is not a symbol of sight, but of attention. Not of seeing, but of looking. Looking again, at something familiar, as if for the first time. Looking again at our rituals, our materials, our tools, our land, and our people, without the inherited sense of inferiority. Looking inward, ahead, around. And sometimes, not at all.",
       "In its stylistic entirety, The logo speaks of reform in the system to include human tenderness in contrast with efficiency goals. It speaks of community and reaching out. It speaks of strong, intentional, creative action.",
       "The logotype weaves different accents into the English name. The Dot beneath the F not only represents the Nuqta used in writing the word in devanagari, but also acts as our Nazar ka Teeka onto our beloved.",
+    ],
+    subtitle: [
+      ".",
       "*We like to think of logos as bite sized pieces of art – like an elaborate thought vacuum-packed into a few pixels. Making a logo feels like a party trick: like making a thought-dove transform into a small white rose and conjuring it back at a swish. Understanding a logo, as with any piece of art, feels like decrypting a message, written in a language with more forgiving boundaries than letters or syllables.",
       "The first thing designers are taught is the holy distinction between art and design: functionality. It slips almost boastfully off the educator’s tongue – Design is functional, Art is merely expressive.",
       "Design is selfless, Art is selfish.",
@@ -56,7 +58,7 @@ const blogPosts = [
       "Careless trespassing of these divides (with wonderful consequences) has led us to believe that the border is fictitious. A comforting fable, created perhaps to compensate for the lack of clarity in creative fields. We’re setting out to rethink this educator’s handbook definition of design – as an industrial and marketing practice, separate from the arts.",
       "History has shown magic to exist at intersections, or rather where there are no boxes and thus no intersections. Leonardo da Vinci’s machines, sketches, and anatomical drawings were engineering designs and works of art. The Bauhaus drew no distinction and their furniture, typefaces, and buildings, and even textiles were artworks. Charles and Ray Eames described design as an inseparable that evolves out of the life of a people.",
       "We believe that it really is free-range here, and there is simply nothing that separates disciplines to a perfect divide. Design, and art, thus become limitless mediums of inquiry into existing systems; and often, the inquiry becomes even more important than the designed object."
-    ]
+    ],
   },
   /*
   // The following blog post content has been commented out as requested:
@@ -1346,37 +1348,34 @@ function App() {
               )}
             </h1>
 
-
-            <h2
-              className={`text-black mb-8 leading-tight text-sm md:text-lg lg:text-xl ${(currentPostIndex === 0 || currentPostIndex === 1) ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
-              style={
-                (currentPostIndex === 0 || currentPostIndex === 1) && currentPost.subtitle === '*or maybe something else entirely.'
-                  ? {
-                      fontFamily: 'Sofia Sans',
-                      fontWeight: 400,
-                      color: '#000',
-                      lineHeight: 1.3,
-                    }
-                  : (currentPostIndex === 0 || currentPostIndex === 1)
-                  ? {
-                      fontFamily: 'Courier Prime, Courier, monospace',
-                      fontWeight: 400,
-                      color: '#6B7280',
-                      lineHeight: 1.3,
-                    }
-                  : {
-                      fontFamily: 'Sofia Sans',
-                      fontWeight: 400,
-                    }
-              }
-            >
-              {currentPost.subtitle}
-            </h2>
+            {/* First and third blogs: subtitle comes right after title (before date). Supports string or string[] */}
+            {currentPostIndex !== 1 && currentPost.subtitle && (
+              Array.isArray(currentPost.subtitle) ? (
+                <div className="mb-8">
+                  {currentPost.subtitle.map((para: string, idx: number) => (
+                    <h2
+                      key={idx}
+                      className="text-black leading-tight text-sm md:text-lg lg:text-xl mb-6"
+                      style={{ fontFamily: 'Sofia Sans', fontWeight: 400, color: '#000', lineHeight: 1.3 }}
+                    >
+                      {para}
+                    </h2>
+                  ))}
+                </div>
+              ) : (
+                <h2
+                  className="text-black mb-8 leading-tight text-sm md:text-lg lg:text-xl"
+                  style={{ fontFamily: 'Sofia Sans', fontWeight: 400, color: '#000', lineHeight: 1.3 }}
+                >
+                  {currentPost.subtitle as string}
+                </h2>
+              )
+            )}
 
 
             <p
-              className={`text-base mb-10 ${(currentPostIndex === 0 || currentPostIndex === 1) ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
-              style={(currentPostIndex === 0 || currentPostIndex === 1) ? {
+              className={`text-base mb-10 ${(currentPostIndex === 0 || currentPostIndex === 1 || currentPostIndex === 2) ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
+              style={(currentPostIndex === 0 || currentPostIndex === 1 || currentPostIndex === 2) ? {
                 fontFamily: 'Courier Prime, Courier, monospace',
                 fontWeight: 400,
                 color: '#6B7280',
@@ -1463,6 +1462,31 @@ function App() {
                 );
               })}
             </div>
+
+            {/* Second blog: subtitle goes at the end; render as spaced paragraphs. Supports string or string[] */}
+            {currentPostIndex === 1 && currentPost.subtitle && (
+              <div className="mt-10">
+                {Array.isArray(currentPost.subtitle)
+                  ? currentPost.subtitle.map((para: string, idx: number) => (
+                      <p
+                        key={idx}
+                        className="text-black leading-tight text-sm md:text-lg lg:text-xl mb-6"
+                        style={{ fontFamily: 'Sofia Sans', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
+                      >
+                        {para}
+                      </p>
+                    ))
+                  : (currentPost.subtitle as string).split('\n\n').map((para, idx) => (
+                      <p
+                        key={idx}
+                        className="text-black leading-tight text-sm md:text-lg lg:text-xl mb-6"
+                        style={{ fontFamily: 'Sofia Sans', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
+                      >
+                        {para}
+                      </p>
+                    ))}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -1541,20 +1565,32 @@ function App() {
             />
           </span>
         </h1>
-        <h2
-          className={`mb-4 leading-relaxed text-base ${(currentPostIndex === 0 || currentPostIndex === 1) ? 'text-gray-500 leading-snug' : ''}`}
-          style={{
-            fontFamily: 'Sofia Sans, sans-serif',
-            fontWeight: 400,
-            color: (currentPostIndex === 0 || currentPostIndex === 1) && currentPost.subtitle === '*or maybe something else entirely.' ? '#000' : ((currentPostIndex === 0 || currentPostIndex === 1) ? '#6B7280' : undefined),
-            lineHeight: 1.3,
-          }}
-        >
-          {currentPost.subtitle}
-        </h2>
+        {/* First and third blogs: subtitle right after title (before date). Supports string or string[] */}
+        {currentPostIndex !== 1 && currentPost.subtitle && (
+          Array.isArray(currentPost.subtitle) ? (
+            <div className="mb-4">
+              {currentPost.subtitle.map((para: string, idx: number) => (
+                <h2
+                  key={idx}
+                  className="leading-relaxed text-base mb-4"
+                  style={{ fontFamily: 'Sofia Sans, sans-serif', fontWeight: 400, color: '#000', lineHeight: 1.3 }}
+                >
+                  {para}
+                </h2>
+              ))}
+            </div>
+          ) : (
+            <h2
+              className="mb-4 leading-relaxed text-base"
+              style={{ fontFamily: 'Sofia Sans, sans-serif', fontWeight: 400, color: '#000', lineHeight: 1.3 }}
+            >
+              {currentPost.subtitle as string}
+            </h2>
+          )
+        )}
         <p
-          className={`text-base mb-10 ${(currentPostIndex === 0 || currentPostIndex === 1) ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
-          style={(currentPostIndex === 0 || currentPostIndex === 1) ? {
+          className={`text-base mb-10 ${(currentPostIndex === 0 || currentPostIndex === 1 || currentPostIndex === 2) ? 'text-gray-500 text-sm md:text-base lg:text-lg leading-snug' : ''}`}
+          style={(currentPostIndex === 0 || currentPostIndex === 1 || currentPostIndex === 2) ? {
             fontFamily: 'Courier Prime, Courier, monospace',
             fontWeight: 400,
             color: '#6B7280',
@@ -1610,6 +1646,31 @@ function App() {
             );
           })}
         </div>
+
+        {/* Second blog: subtitle at end; render spaced paragraphs for mobile. Supports string or string[] */}
+        {currentPostIndex === 1 && currentPost.subtitle && (
+          <div className="mt-10">
+            {Array.isArray(currentPost.subtitle)
+              ? currentPost.subtitle.map((para: string, idx: number) => (
+                  <p
+                    key={idx}
+                    className="text-black leading-tight text-base mb-6"
+                    style={{ fontFamily: 'Sofia Sans, sans-serif', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
+                  >
+                    {para}
+                  </p>
+                ))
+              : (currentPost.subtitle as string).split('\n\n').map((para, idx) => (
+                  <p
+                    key={idx}
+                    className="text-black leading-tight text-base mb-6"
+                    style={{ fontFamily: 'Sofia Sans, sans-serif', fontWeight: 400, color: '#000', lineHeight: 1.3, whiteSpace: 'pre-line' }}
+                  >
+                    {para}
+                  </p>
+                ))}
+          </div>
+        )}
       </div>
 
       {/* Game mode overlay */}
