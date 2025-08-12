@@ -37,6 +37,27 @@ const blogPosts = [
       "We're starting small. A studio with no ceilings. A balcony and a tailor. The story that started it all. And soon, our first public project."
     ]
   },
+  {
+    title: "OUR LOGO*",
+    subtitle: "*or maybe something else entirely.",
+    date: "Hi, Reader. Here’s another little detour from scrollable content. This one’s a 5 minute read about our logo, definitions and intersections.",
+    content: [
+      "Although our logo is open to the decrypter, we would like to talk about its origin. It is a small wax seal to a movement that we hope can envelope our people.",
+      "The central form of the logo is a human figure. Inside the context of the circle and square, it is a reference to the Vitruvian Man by Da Vinci. It shows humanity, evolution and art. Da Vinci, the designer, artist, scientist and philosopher, inspires Nufab with his disregard for disciplines and specialisation.",
+      "The central form is carved out of an asterisk. An asterisk implies a footnote, subtext, or contingency — in this case, that “We Preserve*” but *with evolution, and without the stagnant, stale and outdated.",
+      "The eye is not a symbol of sight, but of attention. Not of seeing, but of looking. Looking again, at something familiar, as if for the first time. Looking again at our rituals, our materials, our tools, our land, and our people, without the inherited sense of inferiority. Looking inward, ahead, around. And sometimes, not at all.",
+      "In its stylistic entirety, The logo speaks of reform in the system to include human tenderness in contrast with efficiency goals. It speaks of community and reaching out. It speaks of strong, intentional, creative action.",
+      "The logotype weaves different accents into the English name. The Dot beneath the F not only represents the Nuqta used in writing the word in devanagari, but also acts as our Nazar ka Teeka onto our beloved.",
+      "*We like to think of logos as bite sized pieces of art – like an elaborate thought vacuum-packed into a few pixels. Making a logo feels like a party trick: like making a thought-dove transform into a small white rose and conjuring it back at a swish. Understanding a logo, as with any piece of art, feels like decrypting a message, written in a language with more forgiving boundaries than letters or syllables.",
+      "The first thing designers are taught is the holy distinction between art and design: functionality. It slips almost boastfully off the educator’s tongue – Design is functional, Art is merely expressive.",
+      "Design is selfless, Art is selfish.",
+      "Design facilitates, Art just is.",
+      "Precise, reductionist, unambiguous.",
+      "Careless trespassing of these divides (with wonderful consequences) has led us to believe that the border is fictitious. A comforting fable, created perhaps to compensate for the lack of clarity in creative fields. We’re setting out to rethink this educator’s handbook definition of design – as an industrial and marketing practice, separate from the arts.",
+      "History has shown magic to exist at intersections, or rather where there are no boxes and thus no intersections. Leonardo da Vinci’s machines, sketches, and anatomical drawings were engineering designs and works of art. The Bauhaus drew no distinction and their furniture, typefaces, and buildings, and even textiles were artworks. Charles and Ray Eames described design as an inseparable that evolves out of the life of a people.",
+      "We believe that it really is free-range here, and there is simply nothing that separates disciplines to a perfect divide. Design, and art, thus become limitless mediums of inquiry into existing systems; and often, the inquiry becomes even more important than the designed object."
+    ]
+  },
   /*
   // The following blog post content has been commented out as requested:
   {
@@ -1327,20 +1348,20 @@ function App() {
 
 
             <h2
-              className={`text-black mb-8 leading-tight text-sm md:text-lg lg:text-xl ${currentPostIndex === 0 ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
+              className={`text-black mb-8 leading-tight text-sm md:text-lg lg:text-xl ${(currentPostIndex === 0 || currentPostIndex === 1) ? 'text-gray-500 text-xs md:text-sm lg:text-base leading-snug' : ''}`}
               style={
-                currentPostIndex === 0 && currentPost.subtitle === '*or maybe something else entirely.'
+                (currentPostIndex === 0 || currentPostIndex === 1) && currentPost.subtitle === '*or maybe something else entirely.'
                   ? {
                       fontFamily: 'Sofia Sans',
                       fontWeight: 400,
                       color: '#000',
                       lineHeight: 1.3,
                     }
-                  : currentPostIndex === 0
+                  : (currentPostIndex === 0 || currentPostIndex === 1)
                   ? {
                       fontFamily: 'Courier Prime, Courier, monospace',
                       fontWeight: 400,
-                      color: '#6B7280', // Tailwind gray-500
+                      color: '#6B7280',
                       lineHeight: 1.3,
                     }
                   : {
@@ -1426,15 +1447,15 @@ function App() {
                   return null;
                 }
                 
-                // Default paragraph rendering
+                // Default paragraph rendering (same styling as first blog)
                 return (
                   <p
                     key={index}
-                    className={`leading-relaxed ${currentPostIndex === 1 ? 'text-xs md:text-sm lg:text-base' : 'text-sm md:text-lg lg:text-xl'}`}
+                    className="leading-relaxed text-sm md:text-lg lg:text-xl"
                     style={{
-                      fontFamily: currentPostIndex === 1 ? 'Courier Prime, Courier, monospace' : 'Sofia Sans',
+                      fontFamily: 'Sofia Sans',
                       fontWeight: 400,
-                      color: currentPostIndex === 1 ? '#6B7280' : '#000000', // Same gray as first blog
+                      color: '#000000',
                     }}
                   >
                     {paragraph}
@@ -1505,44 +1526,27 @@ function App() {
 
 
         <h1 className="uppercase text-4xl font-bold mb-1" style={{ fontFamily: 'dotmatri, serif' }}>
-          {currentPostIndex === 0 ? (
-            <span style={{ display: 'inline-block' }}>
-              NUFAB IS A DESIGN STUDIO
-              <img
-                src={Asterisk}
-                alt="Asterisk"
-                style={{
-                  display: 'inline',
-                  height: '0.35em',
-                  width: 'auto',
-                  verticalAlign: 'super',
-                  marginLeft: '0.1em',
-                }}
-              />
-            </span>
-          ) : (
-            <span style={{ display: 'inline-block' }}>
-              {currentPost.title}
-              <img
-                src={Asterisk}
-                alt="Asterisk"
-                style={{
-                  display: 'inline',
-                  height: '0.35em',
-                  width: 'auto',
-                  verticalAlign: 'super',
-                  marginLeft: '0.1em',
-                }}
-              />
-            </span>
-          )}
+          <span style={{ display: 'inline-block' }}>
+            {currentPostIndex === 0 ? 'NUFAB IS A DESIGN STUDIO' : currentPost.title}
+            <img
+              src={Asterisk}
+              alt="Asterisk"
+              style={{
+                display: 'inline',
+                height: '0.35em',
+                width: 'auto',
+                verticalAlign: 'super',
+                marginLeft: '0.1em',
+              }}
+            />
+          </span>
         </h1>
         <h2
-          className={`mb-4 leading-relaxed text-base ${currentPostIndex === 0 ? 'text-gray-500 leading-snug' : ''}`}
+          className={`mb-4 leading-relaxed text-base ${(currentPostIndex === 0 || currentPostIndex === 1) ? 'text-gray-500 leading-snug' : ''}`}
           style={{
             fontFamily: 'Sofia Sans, sans-serif',
             fontWeight: 400,
-            color: currentPostIndex === 0 && currentPost.subtitle === '*or maybe something else entirely.' ? '#000' : (currentPostIndex === 0 ? '#6B7280' : undefined),
+            color: (currentPostIndex === 0 || currentPostIndex === 1) && currentPost.subtitle === '*or maybe something else entirely.' ? '#000' : ((currentPostIndex === 0 || currentPostIndex === 1) ? '#6B7280' : undefined),
             lineHeight: 1.3,
           }}
         >
@@ -1589,29 +1593,17 @@ function App() {
                 </h4>
               );
             }
-            // Special style for "Hi, Reader..." in second blog (first paragraph)
-            if (currentPostIndex === 1 && index === 0) {
-              return (
-                <p
-                  key={index}
-                  className="text-gray-500 text-sm md:text-base lg:text-lg leading-snug mb-4"
-                  style={{
-                    fontFamily: 'Courier Prime, Courier, monospace',
-                    fontWeight: 400,
-                    color: '#6B7280',
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {paragraph}
-                </p>
-              );
-            }
-            // Default paragraph rendering
+            // Second blog: no special-casing; use same paragraph styling as first
+            // Default paragraph rendering (match first blog styling)
             return (
               <p
                 key={index}
-                className="mb-4 leading-relaxed text-base"
-                style={{ fontFamily: 'Sofia Sans, sans-serif' }}
+                className="mb-4 leading-relaxed text-sm md:text-lg lg:text-xl"
+                style={{
+                  fontFamily: 'Sofia Sans, sans-serif',
+                  fontWeight: 400,
+                  color: '#000000',
+                }}
               >
                 {paragraph}
               </p>
