@@ -50,10 +50,7 @@ const blogPosts = [
     ],
     subtitle: [
       "We like to think of logos as bite sized pieces of art – like an elaborate thought vacuum-packed into a few pixels. Making a logo feels like a party trick: like making a thought-dove transform into a small white rose and conjuring it back at a swish. Understanding a logo, as with any piece of art, feels like decrypting a message, written in a language with more forgiving boundaries than letters or syllables.",
-      "The first thing designers are taught is the holy distinction between art and design: functionality. It slips almost boastfully off the educator’s tongue – Design is functional, Art is merely expressive.",
-      "Design is selfless, Art is selfish.",
-      "Design facilitates, Art just is.",
-      "Precise, reductionist, unambiguous.",
+      "The first thing designers are taught is the holy distinction between art and design: functionality. It slips almost boastfully off the educator’s tongue – Design is functional, Art is merely expressive.\nDesign is selfless, Art is selfish.\nDesign facilitates, Art just is.\nPrecise, reductionist, unambiguous.",
       "Careless trespassing of these divides (with wonderful consequences) has led us to believe that the border is fictitious. A comforting fable, created perhaps to compensate for the lack of clarity in creative fields. We’re setting out to rethink this educator’s handbook definition of design – as an industrial and marketing practice, separate from the arts.",
       "History has shown magic to exist at intersections, or rather where there are no boxes and thus no intersections. Leonardo da Vinci’s machines, sketches, and anatomical drawings were engineering designs and works of art. The Bauhaus drew no distinction and their furniture, typefaces, and buildings, and even textiles were artworks. Charles and Ray Eames described design as an inseparable that evolves out of the life of a people.",
       "We believe that it really is free-range here, and there is simply nothing that separates disciplines to a perfect divide. Design, and art, thus become limitless mediums of inquiry into existing systems; and often, the inquiry becomes even more important than the designed object."
