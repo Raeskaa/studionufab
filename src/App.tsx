@@ -92,8 +92,6 @@ const getInitialPostIndex = () => {
   const blogIndexParam = params.get('blog');
   if (blogIndexParam !== null) {
     const initialIndex = parseInt(blogIndexParam, 10);
-    // Adjust index if the commented-out post was previously at index 1
-    if (initialIndex === 1) return 0; // If it was the second post, now it's the first
     if (!isNaN(initialIndex) && initialIndex >= 0 && initialIndex < blogPosts.length) {
       return initialIndex;
     }
