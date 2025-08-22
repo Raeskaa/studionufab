@@ -1,20 +1,48 @@
 import { useEffect } from 'react';
 
-const GoogleAnalytics: React.FC = () => {
-  useEffect(() => {
-    // Google Analytics 4 (GA4) tracking code
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX'; // Replace with your GA4 ID
-    document.head.appendChild(script);
+// TypeScript declarations for Google Analytics
+declare global {
+  interface Window {
+    dataLayer: any[];
+    gtag: (...args: any[]) => void;
+  }
+}
 
-    window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any[]) {
-      window.dataLayer.push(args);
+interface GoogleAnalyticsProps {
+  measurementId?: string;
+}
+
+const GoogleAnalytics: React.FC<GoogleAnalyticsProps> = ({ 
+  measurementId = 'G-XXXXXXXXXX' // Default placeholder, replace with your actual GA4 ID
+}) => {
+  useEffect(() => {
+    // Only run in browser environment
+    if (typeof window === 'undefined') return;
+
+    try {
+      // Google Analytics 4 (GA4) tracking code
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+      document.head.appendChild(script);
+
+      // Initialize dataLayer
+      window.dataLayer = window.dataLayer || [];
+      
+      // Define gtag function
+      window.gtag = function(...args: any[]) {
+        window.dataLayer.push(args);
+      };
+      
+      // Initialize Google Analytics
+      window.gtag('js', new Date());
+      window.gtag('config', measurementId);
+      
+      console.log('Google Analytics initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize Google Analytics:', error);
     }
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX'); // Replace with your GA4 ID
-  }, []);
+  }, [measurementId]);
 
   return null;
 };
