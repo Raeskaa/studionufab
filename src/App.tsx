@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Asterisk from '../asterisk.svg';
 import SEO from './components/SEO';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 
 const colors = [
@@ -934,6 +935,7 @@ function App() {
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ backgroundColor }}>
       <SEO currentPostIndex={currentPostIndex} />
+      <GoogleAnalytics />
       {/* Custom CSS for scrollbar */}
       <style>
         {`
