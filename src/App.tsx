@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Asterisk from '../asterisk.svg';
+import SEO from './components/SEO';
 
 
 const colors = [
@@ -647,7 +648,7 @@ function App() {
 
 
   // --- Draggable Frame Functions ---
-  const startDraggingFrame = (e: React.MouseEvent<HTMLDivElement>) => {
+  const startDraggingFrame = (e: React.MouseEvent<HTMLElement>) => {
     if (!blogFrameRef.current) return;
 
 
@@ -662,7 +663,7 @@ function App() {
   };
 
 
-  const dragFrame = (e: React.MouseEvent<HTMLDivElement>) => {
+  const dragFrame = (e: React.MouseEvent<HTMLElement>) => {
     if (!isDraggingFrame) return;
 
 
@@ -932,6 +933,7 @@ function App() {
   console.log('Rendering, gameMode:', gameMode);
   return (
     <div className="relative min-h-screen overflow-hidden" style={{ backgroundColor }}>
+      <SEO currentPostIndex={currentPostIndex} />
       {/* Custom CSS for scrollbar */}
       <style>
         {`
@@ -1253,7 +1255,7 @@ function App() {
 
       {/* Blog Content Frame - Conditionally Rendered */}
       {!gameMode && showBlogContentFrame && (
-        <div
+        <article
           ref={blogFrameRef}
           className="absolute bg-white border-2 border-black z-30 p-8" // Removed overflow-y-auto here
           style={{
@@ -1282,7 +1284,7 @@ function App() {
               setIsGrabbing(true);
             }
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={() => {
             stopDraggingFrame();
             setIsGrabbing(false);
           }}
@@ -1518,7 +1520,7 @@ function App() {
               </div>
             )}
           </div>
-        </div>
+        </article>
       )}
 
 
@@ -1554,7 +1556,7 @@ function App() {
 
 
       {/* Mobile Blog Content - Hidden by default for desktop, shown on mobile */}
-      <div className="md:hidden absolute inset-0 bg-white overflow-y-auto p-6 z-30 custom-scrollbar" id="mobile-blog">
+      <article className="md:hidden absolute inset-0 bg-white overflow-y-auto p-6 z-30 custom-scrollbar" id="mobile-blog">
         {/* Removed <h2 className="text-lg font-bold">Blog</h2> */}
         <div className="flex justify-between items-center mb-6">
           {/* Mobile-specific navigation and "I'm bored" buttons */}
@@ -1705,7 +1707,7 @@ function App() {
                   ))}
             </div>
         )}
-      </div>
+      </article>
 
       {/* Game mode overlay */}
       {gameMode && (

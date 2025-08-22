@@ -1,0 +1,21 @@
+{
+  "name": "Studio Nufab - Design Studio & Creative Blog",
+  "short_name": "Studio Nufab",
+  "description": "Studio Nufab is a design studio exploring culture, art, and human connection through innovative design thinking and creative expression.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1244F1",
+  "theme_color": "#1244F1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon_Blog.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["design", "art", "blog", "creative"],
+  "lang": "en",
+  "dir": "ltr"
+}
